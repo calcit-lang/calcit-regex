@@ -9,19 +9,22 @@ API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 APIs:
 
 ```cirru
-calcit.std.regex/re-matches |2 |\d
+regex.core/re-matches |2 |\d
 ; "returns bool"
 
 ; "find first matched item"
-calcit.std.regex/re-find |a4 |\d
-calcit.std.regex/re-find-index |a1 |\d
+regex.core/re-find |a4 |\d
+regex.core/re-find-index |a1 |\d
 
-calcit.std.regex/re-find-all |123 |\d+
+regex.core/re-find-all |123 |\d+
 
 
-assert= |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} "\"X"
+regex.core/re-replace-all |1ab22c333 |\d{2} "\"X"
+; |1abXcX3
 
-assert= ([] "\"1ab" "\"c" "\"3") $ re-split |1ab22c333 |\d{2}
+
+regex.core/re-split |1ab22c333 |\d{2}
+; [] "\"1ab" "\"c" "\"3"
 ```
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
