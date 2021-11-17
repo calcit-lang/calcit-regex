@@ -2,7 +2,7 @@
 {} (:package |regex)
   :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!)
     :modules $ []
-    :version |0.0.1
+    :version |0.0.2
   :entries $ {}
   :files $ {}
     |regex.core $ {}
@@ -23,6 +23,12 @@
         |re-find $ quote
           defn re-find (s pattern)
             &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_find" s pattern
+        |re-split $ quote
+          defn re-split (s pattern)
+            &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_split" s pattern
+        |re-replace-all $ quote
+          defn re-replace-all (s pattern next)
+            &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_replace_all" s pattern next
     |regex.util $ {}
       :ns $ quote
         ns regex.util $ :require
@@ -39,7 +45,7 @@
     |regex.test $ {}
       :ns $ quote
         ns regex.test $ :require
-          regex.core :refer $ re-matches re-find-index re-find re-find-all
+          regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all
           regex.$meta :refer $ calcit-dirname calcit-filename
       :defs $ {}
         |main! $ quote
@@ -54,3 +60,5 @@
             assert= ([] |123) (re-find-all |123 |\d+)
             assert= ([] |1 |2 |3) (re-find-all |1a2a3 |\d+)
             assert= ([] |1 |2 |34) (re-find-all |1a2a34 |\d+)
+            assert= |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} "\"X"
+            assert= ([] "\"1ab" "\"c" "\"3") (re-split |1ab22c333 |\d{2})
