@@ -85,3 +85,42 @@ pub fn re_find_all(args: Vec<Edn>) -> Result<Edn, String> {
     Err(format!("re-find-all expected 2 strings: {:?}", args))
   }
 }
+
+#[no_mangle]
+pub fn re_split(args: Vec<Edn>) -> Result<Edn, String> {
+  if args.len() == 2 {
+    match (&args[0], &args[1]) {
+      (Edn::Str(s), Edn::Str(pattern)) => match Regex::new(pattern) {
+        Ok(p) => {
+          let mut ys: Vec<Edn> = vec![];
+          for piece in p.split(s) {
+            ys.push(Edn::str(piece));
+          }
+          Ok(Edn::List(ys))
+        }
+        Err(e) => Err(format!("re-split failed, {}", e)),
+      },
+      (_, _) => Err(format!("re-split expected 2 strings: {:?}", args)),
+    }
+  } else {
+    Err(format!("re-split expected 2 strings: {:?}", args))
+  }
+}
+
+#[no_mangle]
+pub fn re_replace_all(args: Vec<Edn>) -> Result<Edn, String> {
+  if args.len() == 3 {
+    match (&args[0], &args[1], &args[2]) {
+      (Edn::Str(s), Edn::Str(pattern), Edn::Str(next)) => match Regex::new(pattern) {
+        Ok(p) => Ok(Edn::str(p.replace_all(&**s, &**next).into_owned())),
+        Err(e) => Err(format!("re-replace-all failed, {}", e)),
+      },
+      (a, b, c) => Err(format!(
+        "re-replace-all expected 3 strings: {} {} {}",
+        a, b, c
+      )),
+    }
+  } else {
+    Err(format!("re-replace-all expected 3 strings: {:?}", args))
+  }
+}
