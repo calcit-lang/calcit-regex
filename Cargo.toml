@@ -2,7 +2,7 @@
 name = "calcit_regex"
 version = "0.0.2"
 authors = ["jiyinyiyong <jiyinyiyong@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 name = "calcit_std"
@@ -13,6 +13,6 @@ crate-type = ["dylib"] # Creates dynamic lib
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cirru_edn = "0.2.11"
-cirru_parser = "0.1.16"
-regex = "1.5.4"
+cirru_edn = "0.5.0"
+cirru_parser = "0.1.25"
+regex = "1.8.4"
