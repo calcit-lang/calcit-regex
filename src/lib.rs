@@ -1,9 +1,26 @@
-use cirru_edn::{Edn, EdnListView};
+use std::sync::Arc;
+
+use cirru_edn::{Edn, EdnAnyRef, EdnListView};
 use regex::Regex;
 
 #[no_mangle]
 pub fn abi_version() -> String {
-  String::from("0.0.7")
+  String::from("0.0.8")
+}
+
+#[no_mangle]
+pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
+  if args.len() == 1 {
+    match &args[0] {
+      Edn::Str(s) => match Regex::new(s) {
+        Ok(pattern) => Ok(Edn::AnyRef(EdnAnyRef(Arc::from(pattern)))),
+        Err(e) => Err(format!("re-pattern failed, {}", e)),
+      },
+      _ => Err(format!("re-pattern expect 1 string, got {:?}", args)),
+    }
+  } else {
+    Err(format!("re-pattern expect 1 string, got {:?}", args))
+  }
 }
 
 #[no_mangle]
@@ -14,6 +31,13 @@ pub fn re_matches(args: Vec<Edn>) -> Result<Edn, String> {
         Ok(p) => Ok(Edn::Bool(p.is_match(s))),
         Err(e) => Err(format!("re-matches failed, {}", e)),
       },
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          Ok(Edn::Bool(pattern.is_match(s)))
+        } else {
+          Err(format!("re-matches expected a regex, got {:?}", p))
+        }
+      }
       (_, _) => Err(format!("re-matches expected 2 strings: {:?}", args)),
     }
   } else {
@@ -34,6 +58,16 @@ pub fn re_find_index(args: Vec<Edn>) -> Result<Edn, String> {
           Err(e) => Err(format!("re-find-index failed, {}", e)),
         }
       }
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          match pattern.find(s) {
+            Some(matched) => Ok(Edn::Number(matched.start() as f64)),
+            None => Ok(Edn::Number(-1.0)), // TODO maybe nil
+          }
+        } else {
+          Err(format!("re-find-index expected a regex, got {:?}", p))
+        }
+      }
       (_, _) => Err(format!("re-find-index expected 2 strings: {:?}", args)),
     }
   } else {
@@ -51,11 +85,22 @@ pub fn re_find(args: Vec<Edn>) -> Result<Edn, String> {
           Ok(p) => {
             let mut matched = p.find_iter(s);
             match matched.next() {
-              Some(v) => Ok(Edn::Str(v.as_str().to_string().into())),
-              None => Ok(Edn::Str("".to_owned().into())), // TODO maybe nil
+              Some(v) => Ok(Edn::str(v.as_str().to_string())),
+              None => Ok(Edn::from("")), // TODO maybe nil
             }
           }
           Err(e) => Err(format!("re-find failed, {}", e)),
+        }
+      }
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          let mut matched = pattern.find_iter(s);
+          match matched.next() {
+            Some(v) => Ok(Edn::str(v.as_str().to_string())),
+            None => Ok(Edn::from("")), // TODO maybe nil
+          }
+        } else {
+          Err(format!("re-find expected a regex, got {:?}", p))
         }
       }
       (_, _) => Err(format!("re-find expected 2 strings: {:?}", args)),
@@ -79,6 +124,17 @@ pub fn re_find_all(args: Vec<Edn>) -> Result<Edn, String> {
         }
         Err(e) => Err(format!("re-find-all failed, {}", e)),
       },
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          let mut ys: Vec<Edn> = vec![];
+          for v in pattern.find_iter(s) {
+            ys.push(Edn::Str(v.as_str().to_string().into()))
+          }
+          Ok(Edn::List(EdnListView(ys)))
+        } else {
+          Err(format!("re-find-all expected a regex, got {:?}", p))
+        }
+      }
       (_, _) => Err(format!("re-find-all expected 2 strings: {:?}", args)),
     }
   } else {
@@ -100,6 +156,17 @@ pub fn re_split(args: Vec<Edn>) -> Result<Edn, String> {
         }
         Err(e) => Err(format!("re-split failed, {}", e)),
       },
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          let mut ys: Vec<Edn> = vec![];
+          for piece in pattern.split(s) {
+            ys.push(Edn::str(piece));
+          }
+          Ok(Edn::List(EdnListView(ys)))
+        } else {
+          Err(format!("re-split expected a regex, got {:?}", p))
+        }
+      }
       (_, _) => Err(format!("re-split expected 2 strings: {:?}", args)),
     }
   } else {
@@ -115,6 +182,13 @@ pub fn re_replace_all(args: Vec<Edn>) -> Result<Edn, String> {
         Ok(p) => Ok(Edn::str(p.replace_all(s, &**next).into_owned())),
         Err(e) => Err(format!("re-replace-all failed, {}", e)),
       },
+      (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p)), Edn::Str(next)) => {
+        if let Some(pattern) = p.downcast_ref::<Regex>() {
+          Ok(Edn::str(pattern.replace_all(s, &**next).into_owned()))
+        } else {
+          Err(format!("re-replace-all expected a regex, got {:?}", p))
+        }
+      }
       (a, b, c) => Err(format!("re-replace-all expected 3 strings: {} {} {}", a, b, c)),
     }
   } else {

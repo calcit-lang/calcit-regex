@@ -1,6 +1,6 @@
 
 {} (:package |regex)
-  :configs $ {} (:init-fn |regex.test/main!) (:port 6001) (:reload-fn |regex.test/reload!) (:version |0.0.3)
+  :configs $ {} (:init-fn |regex.test/main!) (:port 6001) (:reload-fn |regex.test/reload!) (:version |0.0.5-a1)
     :modules $ []
   :entries $ {}
   :files $ {}
@@ -82,6 +82,23 @@
                   |r $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"re_matches")
                   |v $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |pattern)
+        |re-pattern $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1715795933947) (:by |u0)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1715795933947) (:by |u0) (:text |defn)
+              |b $ %{} :Leaf (:at 1715795933947) (:by |u0) (:text |re-pattern)
+              |h $ %{} :Expr (:at 1715795940312) (:by |u0)
+                :data $ {}
+                  |b $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |pattern)
+              |l $ %{} :Expr (:at 1715795940312) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |&call-dylib-edn)
+                  |b $ %{} :Expr (:at 1715795940312) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |get-dylib-path)
+                      |b $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                  |h $ %{} :Leaf (:at 1715795950203) (:by |u0) (:text "|\"re_pattern")
+                  |o $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |pattern)
         |re-replace-all $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1637157516835) (:by |u0)
             :data $ {}
@@ -293,6 +310,87 @@
                       |T $ %{} :Leaf (:at 1637157620368) (:by |u0) (:text |re-split)
                       |j $ %{} :Leaf (:at 1637157591536) (:by |u0) (:text ||1ab22c333)
                       |r $ %{} :Leaf (:at 1637157596985) (:by |u0) (:text ||\d{2})
+              |yz $ %{} :Expr (:at 1715796182324) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1715796183478) (:by |u0) (:text |println)
+                  |b $ %{} :Leaf (:at 1715796196505) (:by |u0) (:text "|\"%%% test variable holding regex")
+              |z $ %{} :Expr (:at 1715795960911) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1715795963731) (:by |u0) (:text |let)
+                  |b $ %{} :Expr (:at 1715795964022) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Expr (:at 1715795964146) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715795966487) (:by |u0) (:text |pattern)
+                          |b $ %{} :Expr (:at 1715795969557) (:by |u0)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1715795972580) (:by |u0) (:text |re-pattern)
+                              |b $ %{} :Leaf (:at 1715795974817) (:by |u0) (:text "|\"\\d+")
+                  |e $ %{} :Expr (:at 1715797292331) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715797294062) (:by |u0) (:text |println)
+                      |X $ %{} :Leaf (:at 1715797301485) (:by |u0) (:text "|\"Pattern is:")
+                      |b $ %{} :Leaf (:at 1715797296817) (:by |u0) (:text |pattern)
+                  |h $ %{} :Expr (:at 1715796117788) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |assert=)
+                      |b $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |true)
+                      |h $ %{} :Expr (:at 1715796117788) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |re-matches)
+                          |b $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text ||2)
+                          |h $ %{} :Leaf (:at 1715796124899) (:by |u0) (:text |pattern)
+                  |j $ %{} :Expr (:at 1715796117788) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |assert=)
+                      |b $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |true)
+                      |h $ %{} :Expr (:at 1715796117788) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |re-matches)
+                          |b $ %{} :Leaf (:at 1715796136285) (:by |u0) (:text ||23)
+                          |h $ %{} :Leaf (:at 1715796124899) (:by |u0) (:text |pattern)
+                  |l $ %{} :Expr (:at 1715796117788) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |assert=)
+                      |b $ %{} :Leaf (:at 1715796171969) (:by |u0) (:text |false)
+                      |h $ %{} :Expr (:at 1715796117788) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796117788) (:by |u0) (:text |re-matches)
+                          |b $ %{} :Leaf (:at 1715796130255) (:by |u0) (:text ||qq)
+                          |h $ %{} :Leaf (:at 1715796124899) (:by |u0) (:text |pattern)
+                  |o $ %{} :Expr (:at 1715796202090) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796204524) (:by |u0) (:text |assert=)
+                      |b $ %{} :Leaf (:at 1715796236610) (:by |u0) (:text "|\"22")
+                      |h $ %{} :Expr (:at 1715796212276) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796226879) (:by |u0) (:text |re-find)
+                          |b $ %{} :Leaf (:at 1715796215253) (:by |u0) (:text ||q22)
+                          |h $ %{} :Leaf (:at 1715796212276) (:by |u0) (:text |pattern)
+                  |q $ %{} :Expr (:at 1715796244650) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text |assert=)
+                      |b $ %{} :Expr (:at 1715796244650) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text |[])
+                          |b $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text ||1)
+                          |h $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text ||2)
+                          |l $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text ||3)
+                      |h $ %{} :Expr (:at 1715796244650) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796244650) (:by |u0) (:text |re-find-all)
+                          |b $ %{} :Leaf (:at 1715796249538) (:by |u0) (:text ||1q2q3)
+                          |h $ %{} :Leaf (:at 1715796253498) (:by |u0) (:text |pattern)
+                  |s $ %{} :Expr (:at 1715796262291) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text |assert=)
+                      |b $ %{} :Leaf (:at 1715796290165) (:by |u0) (:text ||XabXcX)
+                      |h $ %{} :Expr (:at 1715796262291) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text |re-replace-all)
+                          |b $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text ||1ab22c333)
+                          |h $ %{} :Leaf (:at 1715796267870) (:by |u0) (:text |pattern)
+                          |l $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text "|\"X")
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1636960219938) (:by |u0)
           :data $ {}
@@ -313,6 +411,7 @@
                         |v $ %{} :Leaf (:at 1636960219938) (:by |u0) (:text |re-find-all)
                         |x $ %{} :Leaf (:at 1637157659783) (:by |u0) (:text |re-split)
                         |y $ %{} :Leaf (:at 1637157663541) (:by |u0) (:text |re-replace-all)
+                        |z $ %{} :Leaf (:at 1715795979178) (:by |u0) (:text |re-pattern)
                 |r $ %{} :Expr (:at 1636960219938) (:by |u0)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1636960219938) (:by |u0) (:text |regex.$meta)

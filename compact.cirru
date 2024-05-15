@@ -1,6 +1,6 @@
 
 {} (:package |regex)
-  :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!) (:version |0.0.3)
+  :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!) (:version |0.0.5-a1)
     :modules $ []
   :entries $ {}
   :files $ {}
@@ -22,6 +22,10 @@
           :code $ quote
             defn re-matches (s pattern)
               &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_matches" s pattern
+        |re-pattern $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn re-pattern (pattern)
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_pattern" pattern
         |re-replace-all $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-replace-all (s pattern next)
@@ -52,10 +56,20 @@
               assert= ([] |1 |2 |34) (re-find-all |1a2a34 |\d+)
               assert= |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} "\"X"
               assert= ([] "\"1ab" "\"c" "\"3") (re-split |1ab22c333 |\d{2})
+              println "\"%%% test variable holding regex"
+              let
+                  pattern $ re-pattern "\"\\d+"
+                println "\"Pattern is:" pattern
+                assert= true $ re-matches |2 pattern
+                assert= true $ re-matches |23 pattern
+                assert= false $ re-matches |qq pattern
+                assert= "\"22" $ re-find |q22 pattern
+                assert= ([] |1 |2 |3) (re-find-all |1q2q3 pattern)
+                assert= |XabXcX $ re-replace-all |1ab22c333 pattern "\"X"
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns regex.test $ :require
-            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all
+            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern
             regex.$meta :refer $ calcit-dirname calcit-filename
     |regex.util $ %{} :FileEntry
       :defs $ {}
