@@ -16,7 +16,7 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
         Ok(pattern) => {
           let p = Arc::from(pattern);
           let p2 = p.to_owned();
-          // std::mem::forget(p);
+          std::mem::forget(p);
           Ok(Edn::AnyRef(EdnAnyRef(p2)))
         }
         Err(e) => Err(format!("re-pattern failed, {}", e)),
