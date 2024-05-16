@@ -13,7 +13,12 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 1 {
     match &args[0] {
       Edn::Str(s) => match Regex::new(s) {
-        Ok(pattern) => Ok(Edn::AnyRef(EdnAnyRef(Arc::from(pattern)))),
+        Ok(pattern) => {
+          let p = Arc::from(pattern);
+          let p2 = p.to_owned();
+          // std::mem::forget(p);
+          Ok(Edn::AnyRef(EdnAnyRef(p2)))
+        }
         Err(e) => Err(format!("re-pattern failed, {}", e)),
       },
       _ => Err(format!("re-pattern expect 1 string, got {:?}", args)),
