@@ -21,7 +21,7 @@
                   |j $ %{} :Expr (:at 1636960151241) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883726895) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"re_find")
                   |v $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |pattern)
@@ -40,7 +40,7 @@
                   |j $ %{} :Expr (:at 1636960151241) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883745892) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"re_find_all")
                   |v $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |pattern)
@@ -59,7 +59,7 @@
                   |j $ %{} :Expr (:at 1636960151241) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883751340) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"re_find_index")
                   |v $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |pattern)
@@ -78,7 +78,7 @@
                   |j $ %{} :Expr (:at 1636960151241) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883754761) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text "|\"re_matches")
                   |v $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1636960151241) (:by |u0) (:text |pattern)
@@ -96,7 +96,7 @@
                   |b $ %{} :Expr (:at 1715795940312) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |get-dylib-path)
-                      |b $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |b $ %{} :Leaf (:at 1715883759286) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |h $ %{} :Leaf (:at 1715795950203) (:by |u0) (:text "|\"re_pattern")
                   |o $ %{} :Leaf (:at 1715795940312) (:by |u0) (:text |pattern)
         |re-replace-all $ %{} :CodeEntry (:doc |)
@@ -115,7 +115,7 @@
                   |j $ %{} :Expr (:at 1637157540472) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1637157540472) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1637157540472) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883763269) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1637157553738) (:by |u0) (:text "|\"re_replace_all")
                   |v $ %{} :Leaf (:at 1637157540472) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1637157540472) (:by |u0) (:text |pattern)
@@ -135,7 +135,7 @@
                   |j $ %{} :Expr (:at 1637157527168) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1637157527168) (:by |u0) (:text |get-dylib-path)
-                      |j $ %{} :Leaf (:at 1637157527168) (:by |u0) (:text "|\"/dylibs/libcalcit_std")
+                      |j $ %{} :Leaf (:at 1715883766379) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
                   |r $ %{} :Leaf (:at 1637157535118) (:by |u0) (:text "|\"re_split")
                   |v $ %{} :Leaf (:at 1637157527168) (:by |u0) (:text |s)
                   |x $ %{} :Leaf (:at 1637157527168) (:by |u0) (:text |pattern)

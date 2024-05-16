@@ -9,31 +9,31 @@
         |re-find $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-find (s pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_find" s pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_find" s pattern
         |re-find-all $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-find-all (s pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_find_all" s pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_find_all" s pattern
         |re-find-index $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-find-index (s pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_find_index" s pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_find_index" s pattern
         |re-matches $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-matches (s pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_matches" s pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_matches" s pattern
         |re-pattern $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-pattern (pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_pattern" pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_pattern" pattern
         |re-replace-all $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-replace-all (s pattern next)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_replace_all" s pattern next
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_replace_all" s pattern next
         |re-split $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-split (s pattern)
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_std") "\"re_split" s pattern
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_split" s pattern
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns regex.core $ :require

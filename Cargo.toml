@@ -1,11 +1,11 @@
 [package]
 name = "calcit_regex"
-version = "0.0.5-a2"
+version = "0.0.5-a3"
 authors = ["jiyinyiyong <jiyinyiyong@gmail.com>"]
 edition = "2021"
 
 [lib]
-name = "calcit_std"
+name = "calcit_regex"
 path = "src/lib.rs"
 crate-type = ["dylib"] # Creates dynamic lib
 
@@ -17,3 +17,7 @@ cirru_edn = "0.6.4-a2"
 # cirru_edn = { path = "/Users/chenyong/repo/cirru/edn.rs" }
 cirru_parser = "0.1.29"
 regex = "1.10.4"
+
+# [profile.release]
+# debug = true
+# opt-level = 1

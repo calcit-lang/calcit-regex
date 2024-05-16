@@ -16,7 +16,7 @@ jobs:
 
       - uses: calcit-lang/setup-cr@0.0.3
         with:
-          version: "0.8.51-a2"
+          version: "0.8.51-a4"
 
       - uses: dtolnay/rust-toolchain@stable
         with:
