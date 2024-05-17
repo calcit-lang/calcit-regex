@@ -70,10 +70,12 @@
                 assert= "\"22" $ re-find |q22 pattern
                 assert= ([] |1 |2 |3) (re-find-all |1q2q3 pattern)
                 assert= |XabXcX $ re-replace-all |1ab22c333 pattern "\"X"
+                w-log $ re-drop pattern
+                w-log $ re-drop pattern
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns regex.test $ :require
-            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern
+            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern re-drop
             regex.$meta :refer $ calcit-dirname calcit-filename
     |regex.util $ %{} :FileEntry
       :defs $ {}

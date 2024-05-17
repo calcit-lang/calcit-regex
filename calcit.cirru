@@ -408,6 +408,20 @@
                           |b $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text ||1ab22c333)
                           |h $ %{} :Leaf (:at 1715796267870) (:by |u0) (:text |pattern)
                           |l $ %{} :Leaf (:at 1715796262291) (:by |u0) (:text "|\"X")
+                  |t $ %{} :Expr (:at 1715969898334) (:by |u0)
+                    :data $ {}
+                      |D $ %{} :Leaf (:at 1715969899030) (:by |u0) (:text |w-log)
+                      |T $ %{} :Expr (:at 1715969887322) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715969887538) (:by |u0) (:text |re-drop)
+                          |b $ %{} :Leaf (:at 1715969889794) (:by |u0) (:text |pattern)
+                  |u $ %{} :Expr (:at 1715969895351) (:by |u0)
+                    :data $ {}
+                      |D $ %{} :Leaf (:at 1715969896514) (:by |u0) (:text |w-log)
+                      |T $ %{} :Expr (:at 1715969887322) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715969887538) (:by |u0) (:text |re-drop)
+                          |b $ %{} :Leaf (:at 1715969889794) (:by |u0) (:text |pattern)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1636960219938) (:by |u0)
           :data $ {}
@@ -429,6 +443,7 @@
                         |x $ %{} :Leaf (:at 1637157659783) (:by |u0) (:text |re-split)
                         |y $ %{} :Leaf (:at 1637157663541) (:by |u0) (:text |re-replace-all)
                         |z $ %{} :Leaf (:at 1715795979178) (:by |u0) (:text |re-pattern)
+                        |zD $ %{} :Leaf (:at 1715969884579) (:by |u0) (:text |re-drop)
                 |r $ %{} :Expr (:at 1636960219938) (:by |u0)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1636960219938) (:by |u0) (:text |regex.$meta)
