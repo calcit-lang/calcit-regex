@@ -6,6 +6,10 @@
   :files $ {}
     |regex.core $ %{} :FileEntry
       :defs $ {}
+        |re-drop $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn re-drop (pattern)
+              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"re_drop" pattern
         |re-find $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-find (s pattern)

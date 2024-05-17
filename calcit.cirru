@@ -6,6 +6,23 @@
   :files $ {}
     |regex.core $ %{} :FileEntry
       :defs $ {}
+        |re-drop $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1715964831711) (:by |u0)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1715964831711) (:by |u0) (:text |defn)
+              |b $ %{} :Leaf (:at 1715964831711) (:by |u0) (:text |re-drop)
+              |h $ %{} :Expr (:at 1715964838668) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1715964838668) (:by |u0) (:text |pattern)
+              |l $ %{} :Expr (:at 1715964838668) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1715964838668) (:by |u0) (:text |&call-dylib-edn)
+                  |b $ %{} :Expr (:at 1715964838668) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715964838668) (:by |u0) (:text |get-dylib-path)
+                      |b $ %{} :Leaf (:at 1715964838668) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
+                  |h $ %{} :Leaf (:at 1715964846736) (:by |u0) (:text "|\"re_drop")
+                  |l $ %{} :Leaf (:at 1715964838668) (:by |u0) (:text |pattern)
         |re-find $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1636960151241) (:by |u0)
             :data $ {}

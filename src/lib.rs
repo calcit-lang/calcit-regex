@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{cell::RefCell, sync::Arc};
 
 use cirru_edn::{Edn, EdnAnyRef, EdnListView};
 use regex::Regex;
@@ -14,7 +14,7 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
     match &args[0] {
       Edn::Str(s) => match Regex::new(s) {
         Ok(pattern) => {
-          let p = Arc::from(pattern);
+          let p = Arc::from(RefCell::new(pattern));
           let p2 = p.to_owned();
           std::mem::forget(p);
           Ok(Edn::AnyRef(EdnAnyRef(p2)))
@@ -37,7 +37,7 @@ pub fn re_matches(args: Vec<Edn>) -> Result<Edn, String> {
         Err(e) => Err(format!("re-matches failed, {}", e)),
       },
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           Ok(Edn::Bool(pattern.is_match(s)))
         } else {
           Err(format!("re-matches expected a regex, got {:?}", p))
@@ -64,7 +64,7 @@ pub fn re_find_index(args: Vec<Edn>) -> Result<Edn, String> {
         }
       }
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           match pattern.find(s) {
             Some(matched) => Ok(Edn::Number(matched.start() as f64)),
             None => Ok(Edn::Number(-1.0)), // TODO maybe nil
@@ -98,7 +98,7 @@ pub fn re_find(args: Vec<Edn>) -> Result<Edn, String> {
         }
       }
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           let mut matched = pattern.find_iter(s);
           match matched.next() {
             Some(v) => Ok(Edn::str(v.as_str().to_string())),
@@ -130,7 +130,7 @@ pub fn re_find_all(args: Vec<Edn>) -> Result<Edn, String> {
         Err(e) => Err(format!("re-find-all failed, {}", e)),
       },
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           let mut ys: Vec<Edn> = vec![];
           for v in pattern.find_iter(s) {
             ys.push(Edn::Str(v.as_str().to_string().into()))
@@ -162,7 +162,7 @@ pub fn re_split(args: Vec<Edn>) -> Result<Edn, String> {
         Err(e) => Err(format!("re-split failed, {}", e)),
       },
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p))) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           let mut ys: Vec<Edn> = vec![];
           for piece in pattern.split(s) {
             ys.push(Edn::str(piece));
@@ -188,7 +188,7 @@ pub fn re_replace_all(args: Vec<Edn>) -> Result<Edn, String> {
         Err(e) => Err(format!("re-replace-all failed, {}", e)),
       },
       (Edn::Str(s), Edn::AnyRef(EdnAnyRef(p)), Edn::Str(next)) => {
-        if let Some(pattern) = p.downcast_ref::<Regex>() {
+        if let Some(pattern) = p.borrow().downcast_ref::<Regex>() {
           Ok(Edn::str(pattern.replace_all(s, &**next).into_owned()))
         } else {
           Err(format!("re-replace-all expected a regex, got {:?}", p))
