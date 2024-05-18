@@ -16,6 +16,15 @@ pub fn abi_version() -> String {
   String::from("0.0.8")
 }
 
+/// just call mem::forget to avoid GC
+#[no_mangle]
+pub fn holding_patterns_memory() -> Result<Edn, String> {
+  let patterns = PATTERNS.lock().unwrap();
+  let data = patterns.to_owned();
+  std::mem::forget(data);
+  Ok(Edn::Nil)
+}
+
 #[no_mangle]
 pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 1 {
@@ -47,6 +56,7 @@ pub fn re_drop(args: Vec<Edn>) -> Result<Edn, String> {
         let mut patterns = PATTERNS.lock().unwrap();
         let mut i = 0;
         let mut found = false;
+        println!("patterns size {}", patterns.len());
         for v in patterns.iter() {
           if v == p {
             found = true;

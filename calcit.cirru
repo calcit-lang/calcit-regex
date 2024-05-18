@@ -6,6 +6,25 @@
   :files $ {}
     |regex.core $ %{} :FileEntry
       :defs $ {}
+        |hold-patterns-memory! $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1716009462651) (:by |u0)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1716009462651) (:by |u0) (:text |defn)
+              |b $ %{} :Leaf (:at 1716009462651) (:by |u0) (:text |hold-patterns-memory!)
+              |h $ %{} :Expr (:at 1716009462651) (:by |u0)
+                :data $ {}
+              |l $ %{} :Expr (:at 1716009475106) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1716009475106) (:by |u0) (:text |&call-dylib-edn)
+                  |b $ %{} :Expr (:at 1716009475106) (:by |u0)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1716009475106) (:by |u0) (:text |get-dylib-path)
+                      |b $ %{} :Leaf (:at 1716009475106) (:by |u0) (:text "|\"/dylibs/libcalcit_regex")
+                  |h $ %{} :Leaf (:at 1716009480713) (:by |u0) (:text "|\"holding_patterns_memory")
+              |o $ %{} :Expr (:at 1716009497048) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1716009498134) (:by |u0) (:text |println)
+                  |b $ %{} :Leaf (:at 1716009528860) (:by |u0) (:text "|\"memory of regex patterns are set to hold!")
         |re-drop $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1715964831711) (:by |u0)
             :data $ {}
@@ -331,6 +350,9 @@
                 :data $ {}
                   |T $ %{} :Leaf (:at 1715796183478) (:by |u0) (:text |println)
                   |b $ %{} :Leaf (:at 1715796196505) (:by |u0) (:text "|\"%%% test variable holding regex")
+              |yzD $ %{} :Expr (:at 1716009493262) (:by |u0)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1716009493262) (:by |u0) (:text |hold-patterns-memory!)
               |z $ %{} :Expr (:at 1715795960911) (:by |u0)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1715795963731) (:by |u0) (:text |let)
@@ -343,6 +365,13 @@
                             :data $ {}
                               |T $ %{} :Leaf (:at 1715795972580) (:by |u0) (:text |re-pattern)
                               |b $ %{} :Leaf (:at 1715795974817) (:by |u0) (:text "|\"\\d+")
+                      |b $ %{} :Expr (:at 1716006619232) (:by |u0)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1716006620455) (:by |u0) (:text |p2)
+                          |b $ %{} :Expr (:at 1716006621237) (:by |u0)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1716006623615) (:by |u0) (:text |re-pattern)
+                              |b $ %{} :Leaf (:at 1716006626938) (:by |u0) (:text "|\"\\w+")
                   |e $ %{} :Expr (:at 1715797292331) (:by |u0)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1715797294062) (:by |u0) (:text |println)
@@ -414,7 +443,7 @@
                       |T $ %{} :Expr (:at 1715969887322) (:by |u0)
                         :data $ {}
                           |T $ %{} :Leaf (:at 1715969887538) (:by |u0) (:text |re-drop)
-                          |b $ %{} :Leaf (:at 1715969889794) (:by |u0) (:text |pattern)
+                          |b $ %{} :Leaf (:at 1716006630983) (:by |u0) (:text |p2)
                   |u $ %{} :Expr (:at 1715969895351) (:by |u0)
                     :data $ {}
                       |D $ %{} :Leaf (:at 1715969896514) (:by |u0) (:text |w-log)
@@ -444,6 +473,7 @@
                         |y $ %{} :Leaf (:at 1637157663541) (:by |u0) (:text |re-replace-all)
                         |z $ %{} :Leaf (:at 1715795979178) (:by |u0) (:text |re-pattern)
                         |zD $ %{} :Leaf (:at 1715969884579) (:by |u0) (:text |re-drop)
+                        |zP $ %{} :Leaf (:at 1716009488667) (:by |u0) (:text |hold-patterns-memory!)
                 |r $ %{} :Expr (:at 1636960219938) (:by |u0)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1636960219938) (:by |u0) (:text |regex.$meta)
