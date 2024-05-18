@@ -1,15 +1,7 @@
-use std::{
-  cell::RefCell,
-  sync::{Arc, Mutex},
-};
+use std::{cell::RefCell, sync::Arc};
 
 use cirru_edn::{Edn, EdnAnyRef, EdnListView};
-use lazy_static::lazy_static;
 use regex::Regex;
-
-lazy_static! {
-  static ref PATTERNS: Mutex<Vec<EdnAnyRef>> = Mutex::from(vec![]);
-}
 
 #[no_mangle]
 pub fn abi_version() -> String {
@@ -23,11 +15,8 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
       Edn::Str(s) => match Regex::new(s) {
         Ok(pattern) => {
           let p = Arc::from(RefCell::new(pattern));
-          // push to PATTERNS
-          let v = EdnAnyRef(p);
-          let mut patterns = PATTERNS.lock().unwrap();
-          patterns.push(v.to_owned());
-          Ok(Edn::AnyRef(v))
+
+          Ok(Edn::AnyRef(EdnAnyRef(p)))
         }
         Err(e) => Err(format!("re-pattern failed, {}", e)),
       },
@@ -35,38 +24,6 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
     }
   } else {
     Err(format!("re-pattern expect 1 string, got {:?}", args))
-  }
-}
-
-/// re_drop drops pattern from global PATTERNS
-#[no_mangle]
-pub fn re_drop(args: Vec<Edn>) -> Result<Edn, String> {
-  if args.len() == 1 {
-    match &args[0] {
-      Edn::AnyRef(p) => {
-        let mut patterns = PATTERNS.lock().unwrap();
-        let mut i = 0;
-        let mut found = false;
-        println!("patterns size {}", patterns.len());
-        for v in patterns.iter() {
-          if v == p {
-            found = true;
-            break;
-          }
-          i += 1;
-        }
-        println!("re-drop found {} at {}\n", found, i);
-        if found {
-          patterns.remove(i);
-          Ok(Edn::from(true))
-        } else {
-          Ok(Edn::from(false))
-        }
-      }
-      _ => Err(format!("re-drop expect 1 pattern, got {:?}", args)),
-    }
-  } else {
-    Err(format!("re-drop expect 1 pattern, got {:?}", args))
   }
 }
 
