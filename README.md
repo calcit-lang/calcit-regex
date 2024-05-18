@@ -30,6 +30,12 @@ regex.core/re-pattern |\d+
 ; "creates any-ref to hold a native regex pattern"
 ```
 
+```cirru
+let
+    pattern $ regex.core/re-pattern "|\d+"
+  regex.core/re-find |a4 |\d
+```
+
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
 ### Workflow
