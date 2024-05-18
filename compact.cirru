@@ -6,11 +6,6 @@
   :files $ {}
     |regex.core $ %{} :FileEntry
       :defs $ {}
-        |hold-patterns-memory! $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defn hold-patterns-memory! ()
-              &call-dylib-edn (get-dylib-path "\"/dylibs/libcalcit_regex") "\"holding_patterns_memory"
-              println "\"memory of regex patterns are set to hold!"
         |re-drop $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn re-drop (pattern)
@@ -66,7 +61,6 @@
               assert= |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} "\"X"
               assert= ([] "\"1ab" "\"c" "\"3") (re-split |1ab22c333 |\d{2})
               println "\"%%% test variable holding regex"
-              hold-patterns-memory!
               let
                   pattern $ re-pattern "\"\\d+"
                   p2 $ re-pattern "\"\\w+"
@@ -79,10 +73,11 @@
                 assert= |XabXcX $ re-replace-all |1ab22c333 pattern "\"X"
                 w-log $ re-drop p2
                 w-log $ re-drop pattern
+                w-log $ re-drop pattern
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns regex.test $ :require
-            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern re-drop hold-patterns-memory!
+            regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern re-drop
             regex.$meta :refer $ calcit-dirname calcit-filename
     |regex.util $ %{} :FileEntry
       :defs $ {}

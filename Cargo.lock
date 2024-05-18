@@ -42,7 +42,9 @@ dependencies = [
 
 [[package]]
 name = "cirru_edn"
-version = "0.6.4-a4"
+version = "0.6.4-a5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "500776efb8ce469a6da13b3ab01f945644aca2b7803fcbad4c4139d10654e9e8"
 dependencies = [
  "bincode",
  "cirru_parser",
