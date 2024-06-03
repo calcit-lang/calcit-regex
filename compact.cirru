@@ -1,6 +1,6 @@
 
 {} (:package |regex)
-  :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!) (:version |0.0.7)
+  :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!) (:version |0.0.8)
     :modules $ []
   :entries $ {}
   :files $ {}
