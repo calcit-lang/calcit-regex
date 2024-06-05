@@ -32,7 +32,7 @@ dependencies = [
 
 [[package]]
 name = "calcit_regex"
-version = "0.0.7"
+version = "0.0.8"
 dependencies = [
  "cirru_edn",
  "cirru_parser",
@@ -42,9 +42,9 @@ dependencies = [
 
 [[package]]
 name = "cirru_edn"
-version = "0.6.8"
+version = "0.6.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4aa8a3c939e1480883ea1371deab36c179e621779f9a7731554b9bec3840189"
+checksum = "e3d12eb005cacee402564d56df5f2e2ee66b1c9440f3de3a972fd4aa0ff5a283"
 dependencies = [
  "bincode",
  "cirru_parser",
@@ -54,9 +54,9 @@ dependencies = [
 
 [[package]]
 name = "cirru_parser"
-version = "0.1.29"
+version = "0.1.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c96247e15778d471f8c94b321fa11220dfb987546fcf8fb73b1a5c2b3a018a78"
+checksum = "320a8dd7792dfd18c39e2b6d06e894028cf2ce0dfb2fcd4964fb730dc37ea150"
 dependencies = [
  "bincode",
 ]
