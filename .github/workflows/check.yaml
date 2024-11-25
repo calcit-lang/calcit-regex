@@ -14,9 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: calcit-lang/setup-cr@0.0.3
-        with:
-          version: "0.8.56"
+      - uses: calcit-lang/setup-cr@0.0.8
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -26,6 +24,6 @@ jobs:
 
       - run: cargo build --release
 
-      - run: mkdir dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
+      - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 
       - run: cr -1
