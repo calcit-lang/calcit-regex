@@ -102,7 +102,7 @@ pub fn re_find_index(args: Vec<Edn>) -> Result<Edn, String> {
 }
 
 #[unsafe(no_mangle)]
-/// takes stirng and patterns, returns a matches string, or empty for nil
+/// takes string and patterns, returns a matches string, or empty for nil
 pub fn re_find(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
