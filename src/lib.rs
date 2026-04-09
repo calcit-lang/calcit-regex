@@ -21,12 +21,17 @@ impl DynEq for RegexWrapper {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn abi_version() -> String {
   String::from("0.0.9")
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
+pub fn edn_version() -> String {
+  cirru_edn::version().to_string()
+}
+
+#[unsafe(no_mangle)]
 pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 1 {
     match &args[0] {
@@ -44,7 +49,7 @@ pub fn re_pattern(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn re_matches(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
@@ -66,7 +71,7 @@ pub fn re_matches(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn re_find_index(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
@@ -96,8 +101,8 @@ pub fn re_find_index(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
-/// takes stirng and patterns, returns a matches string, or empty for nil
+#[unsafe(no_mangle)]
+/// takes string and patterns, returns a matches string, or empty for nil
 pub fn re_find(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
@@ -131,7 +136,7 @@ pub fn re_find(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn re_find_all(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
@@ -163,7 +168,7 @@ pub fn re_find_all(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn re_split(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 2 {
     match (&args[0], &args[1]) {
@@ -195,7 +200,7 @@ pub fn re_split(args: Vec<Edn>) -> Result<Edn, String> {
   }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn re_replace_all(args: Vec<Edn>) -> Result<Edn, String> {
   if args.len() == 3 {
     match (&args[0], &args[1], &args[2]) {
