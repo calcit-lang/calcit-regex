@@ -13,9 +13,9 @@ crate-type = ["dylib"] # Creates dynamic lib
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cirru_edn = "0.7.7"
+cirru_edn = "0.8.0"
 # cirru_edn = { path = "/Users/chenyong/repo/cirru/edn.rs" }
-cirru_parser = "0.2.8"
+cirru_parser = "=0.2.15"
 regex = "1.12.3"
 
 # [profile.release]

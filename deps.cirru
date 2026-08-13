@@ -1,4 +1,3 @@
 
-{}
-  :calcit-version |0.12.35
-  :deps $ []
+{} (:calcit-version |0.13.15)
+  :dependencies $ {}

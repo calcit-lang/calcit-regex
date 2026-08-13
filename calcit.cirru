@@ -1,59 +1,102 @@
 
-{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |regex)
-  :configs $ {} (:init-fn |regex.test/main!) (:reload-fn |regex.test/reload!) (:version |0.0.11)
-    :modules $ []
+{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |regex) (:version |0.0.11)
   :entries $ {}
+    :default $ {} (:description |) (:init-fn 'regex.test/main!) (:mode :native) (:reload-fn 'regex.test/main!)
+      :modules $ []
+      :type-slots $ {}
   :files $ {}
-    |regex.core $ %{} :FileEntry
+    |regex.core $ %{} 'FileEntry
       :defs $ {}
-        |re-drop $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        |re-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-drop (pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop pattern
           :examples $ []
-        |re-find $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'Unit)
+              :args $ [] 'Dynamic
+        |re-find $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-find (s pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s pattern
           :examples $ []
-        |re-find-all $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'String)
+              :args $ [] 'String 'Dynamic
+        |re-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-find-all (s pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s pattern
           :examples $ []
-        |re-find-index $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {}
+              :args $ [] 'String 'Dynamic
+              :return $ :: 'List 'String
+        |re-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-find-index (s pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s pattern
           :examples $ []
-        |re-matches $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'Number)
+              :args $ [] 'String 'Dynamic
+        |re-matches $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-matches (s pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s pattern
           :examples $ []
-        |re-pattern $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'Bool)
+              :args $ [] 'String 'Dynamic
+        |re-pattern $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-pattern (pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_pattern pattern
           :examples $ []
-        |re-replace-all $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'Dynamic)
+              :args $ [] 'String
+        |re-replace-all $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-replace-all (s pattern next)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s pattern next
           :examples $ []
-        |re-split $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'String)
+              :args $ [] 'String 'Dynamic 'String
+        |re-split $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-split (s pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s pattern
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {}
+              :args $ [] 'String 'Dynamic
+              :return $ :: 'List 'String
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns regex.core $ :require
             regex.$meta :refer $ calcit-dirname
             regex.util :refer $ get-dylib-path
-    |regex.test $ %{} :FileEntry
+    |regex.test $ %{} 'FileEntry
       :defs $ {}
-        |main! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        |main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! () (println "|%%%% test for regex") (println "|Test regular expression")
               assert= true $ re-matches |2 |\d
@@ -78,29 +121,46 @@
                 assert= |22 $ re-find |q22 pattern
                 assert= ([] |1 |2 |3) (re-find-all |1q2q3 pattern)
                 assert= |XabXcX $ re-replace-all |1ab22c333 pattern |X
+                println "|Regex tests passed"
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :schema $ :: 'Fn
+            {} (:return 'Unit)
+              :args $ []
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns regex.test $ :require
             regex.core :refer $ re-matches re-find-index re-find re-find-all re-split re-replace-all re-pattern
             regex.$meta :refer $ calcit-dirname calcit-filename
-    |regex.util $ %{} :FileEntry
+    |regex.util $ %{} 'FileEntry
       :defs $ {}
-        |get-dylib-ext $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+        |get-dylib-ext $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro get-dylib-ext () $ case-default (&get-os) |.so (:macos |.dylib) (:windows |.dll)
           :examples $ []
-        |get-dylib-path $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Dynamic
+        |get-dylib-path $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn get-dylib-path (p)
               str (or-current-path calcit-dirname) p $ get-dylib-ext
           :examples $ []
-        |or-current-path $ %{} :CodeEntry (:doc |) (:schema :dynamic)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'String)
+              :args $ [] 'String
+        |or-current-path $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn or-current-path (p)
               if (blank? p) |. p
           :examples $ []
-      :ns $ %{} :NsEntry (:doc |)
+          :ffi $ {}
+            :features $ #{} :js-ffi
+          :schema $ :: 'Fn
+            {} (:return 'String)
+              :args $ [] 'String
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns regex.util $ :require
             regex.$meta :refer $ calcit-dirname calcit-filename
