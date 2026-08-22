@@ -14,17 +14,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: calcit-lang/setup-cr@0.0.9
+      - uses: calcit-lang/setup-calcit@v1
 
       - name: Validate Calcit snapshot and type baseline
         run: |
           caps --ci
-          cr calcit.cirru edit format
+          calcit calcit.cirru edit format
           git diff --exit-code -- calcit.cirru
-          cr calcit.cirru --check-only
-          cr calcit.cirru analyze check-types --summary-only --format json
-          cr calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json
-          cr calcit.cirru analyze deprecated --summary-only --format json
+          calcit calcit.cirru --check-only
+          calcit calcit.cirru analyze check-types --summary-only --format json
+          calcit calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json
+          calcit calcit.cirru analyze deprecated --summary-only --format json
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -37,4 +37,4 @@ jobs:
 
       - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 
-      - run: cr calcit.cirru
+      - run: calcit calcit.cirru
