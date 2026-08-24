@@ -32,8 +32,24 @@ regex.core/re-pattern |\d+
 
 ```cirru
 let
-    pattern $ regex.core/re-pattern "|\d+"
-  regex.core/re-find |a4 |\d
+    pattern $ regex.core/re-pattern |\d+
+  regex.core/re-find |a4 pattern
+```
+
+For repeated matching, the nominal compiled API avoids recompiling the pattern
+and exposes typed methods. Missing matches use `Option` rather than empty-string
+or `-1` sentinels:
+
+```cirru
+let
+    pattern $ regex.core/compile! |\d+
+  assert= (%some |4) $ .find pattern |a4
+  assert= (%none) $ .find pattern |abc
+  assert= (%some 1) $ .find-index pattern |a4
+  assert= ([] |1 |2) $ .find-all pattern |a1b2
+
+; "invalid syntax stays in typed error flow"
+regex.core/compile |[
 ```
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
