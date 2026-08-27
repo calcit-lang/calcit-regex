@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: calcit-lang/setup-calcit@v1
+      - uses: calcit-lang/setup-calcit@v1.3.0
 
       - name: Validate Calcit snapshot and type baseline
         run: |
@@ -33,8 +33,12 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
+      - run: cargo test
+
+      - run: cargo clippy --all-targets -- -D warnings
+
       - run: cargo build --release
 
       - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 
-      - run: calcit calcit.cirru
+      - run: calcit --trace-ffi calcit.cirru

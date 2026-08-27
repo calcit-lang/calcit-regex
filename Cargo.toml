@@ -7,7 +7,7 @@ edition = "2024"
 [lib]
 name = "calcit_regex"
 path = "src/lib.rs"
-crate-type = ["dylib"] # Creates dynamic lib
+crate-type = ["cdylib"] # Exposes only the stable C ABI.
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
