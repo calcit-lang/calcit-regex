@@ -294,7 +294,11 @@
           :examples $ []
           :ffi $ {}
             :features $ #{} :js-ffi
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Macro
+            {}
+              :capabilities $ #{} :platform-read
+              :expansion $ :: 'Expr 'String
+              :required $ []
         |get-dylib-path $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn get-dylib-path (p)

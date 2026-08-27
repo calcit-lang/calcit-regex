@@ -27,7 +27,7 @@ regex.core/re-split |1ab22c333 |\d{2}
 ; [] "\"1ab" "\"c" "\"3"
 
 regex.core/re-pattern |\d+
-; "creates any-ref to hold a native regex pattern"
+; "creates an automatically managed native regex resource"
 ```
 
 ```cirru
@@ -51,6 +51,15 @@ let
 ; "invalid syntax stays in typed error flow"
 regex.core/compile |[
 ```
+
+Compiled patterns use Calcit C-safe opaque resource v1. The dylib keeps each
+`Regex` in a generation-checked registry; Calcit owns the resource lease and
+releases it automatically after the final reference is dropped. No Rust
+`AnyRef`, allocator-owned container, or trait object crosses the dylib boundary.
+
+编译后的 pattern 使用 Calcit C-safe opaque resource v1。动态库通过带 generation
+校验的 registry 保存 `Regex`，Calcit 在最后一个引用释放后自动回收资源；Rust
+`AnyRef`、allocator-owned container 和 trait object 都不会跨越 dylib 边界。
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
