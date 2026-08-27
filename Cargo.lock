@@ -13,7 +13,7 @@ dependencies = [
 
 [[package]]
 name = "calcit_regex"
-version = "0.0.13"
+version = "0.0.14"
 dependencies = [
  "cirru_edn",
  "cirru_parser",
