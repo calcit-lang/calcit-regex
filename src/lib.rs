@@ -5,6 +5,8 @@ use regex::Regex;
 
 mod ffi;
 
+calcit_native_ffi::export_buffer_abi_v1!();
+
 const RESOURCE_TOKEN_STRUCT: &str = "CalcitFfiResourceV1";
 const RESOURCE_TOKEN_FIELD: &str = "token";
 const RESOURCE_TOKEN_BYTES: usize = 16;

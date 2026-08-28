@@ -61,6 +61,15 @@ releases it automatically after the final reference is dropped. No Rust
 校验的 registry 保存 `Regex`，Calcit 在最后一个引用释放后自动回收资源；Rust
 `AnyRef`、allocator-owned container 和 trait object 都不会跨越 dylib 边界。
 
+Buffer-v1 descriptor、buffer ownership、Cirru EDN transport 与 adapter 来自
+共享的 [`calcit_native_ffi`](https://github.com/calcit-lang/calcit-native-ffi)，
+本仓库只维护 regex 业务逻辑和 opaque-resource registry。
+
+Buffer-v1 descriptors, buffer ownership, Cirru EDN transport, and adapters
+come from the shared
+[`calcit_native_ffi`](https://github.com/calcit-lang/calcit-native-ffi). This
+repository keeps only regex behavior and the opaque-resource registry.
+
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
 ### Workflow
