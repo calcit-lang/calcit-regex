@@ -1,6 +1,6 @@
 [package]
 name = "calcit_regex"
-version = "0.0.15"
+version = "0.0.16"
 authors = ["jiyinyiyong <jiyinyiyong@gmail.com>"]
 edition = "2024"
 

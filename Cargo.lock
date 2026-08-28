@@ -22,7 +22,7 @@ dependencies = [
 
 [[package]]
 name = "calcit_regex"
-version = "0.0.15"
+version = "0.0.16"
 dependencies = [
  "calcit_native_ffi",
  "cirru_edn",
