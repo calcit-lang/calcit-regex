@@ -3,8 +3,6 @@ use std::sync::{Arc, LazyLock, Mutex};
 use cirru_edn::{Edn, EdnListView, EdnStructView};
 use regex::Regex;
 
-mod ffi;
-
 calcit_native_ffi::export_buffer_abi_v1!();
 
 const RESOURCE_TOKEN_STRUCT: &str = "CalcitFfiResourceV1";
@@ -256,33 +254,18 @@ pub extern "C" fn calcit_ffi_resource_release_v1(handle: u64, generation: u64) -
   }
 }
 
-macro_rules! export_buffer_method {
-  ($export:ident, $method:ident) => {
-    /// Invoke this regex method through C-safe buffer protocol v1.
-    ///
-    /// # Safety
-    ///
-    /// Request bytes must remain readable and `output` writable for this call.
-    #[unsafe(no_mangle)]
-    pub unsafe extern "C" fn $export(request_ptr: *const u8, request_len: usize, output: *mut ffi::CalcitFfiBuffer) -> i32 {
-      // SAFETY: the shared adapter validates and copies every foreign input.
-      unsafe { ffi::run_buffer_adapter(request_ptr, request_len, output, $method) }
-    }
-  };
-}
-
-export_buffer_method!(re_pattern_calcit_ffi_v1, re_pattern);
-export_buffer_method!(re_compile_result_calcit_ffi_v1, re_compile_result);
-export_buffer_method!(re_matches_calcit_ffi_v1, re_matches);
-export_buffer_method!(re_find_index_calcit_ffi_v1, re_find_index);
-export_buffer_method!(re_find_index_optional_calcit_ffi_v1, re_find_index_optional);
-export_buffer_method!(re_find_calcit_ffi_v1, re_find);
-export_buffer_method!(re_find_optional_calcit_ffi_v1, re_find_optional);
-export_buffer_method!(re_find_all_calcit_ffi_v1, re_find_all);
-export_buffer_method!(re_split_calcit_ffi_v1, re_split);
-export_buffer_method!(re_replace_all_calcit_ffi_v1, re_replace_all);
-export_buffer_method!(re_source_calcit_ffi_v1, re_source);
-export_buffer_method!(re_drop_calcit_ffi_v1, re_drop);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_pattern_calcit_ffi_v1, re_pattern);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_compile_result_calcit_ffi_v1, re_compile_result);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_matches_calcit_ffi_v1, re_matches);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_find_index_calcit_ffi_v1, re_find_index);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_find_index_optional_calcit_ffi_v1, re_find_index_optional);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_find_calcit_ffi_v1, re_find);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_find_optional_calcit_ffi_v1, re_find_optional);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_find_all_calcit_ffi_v1, re_find_all);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_split_calcit_ffi_v1, re_split);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_replace_all_calcit_ffi_v1, re_replace_all);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_source_calcit_ffi_v1, re_source);
+calcit_native_ffi::export_edn_buffer_method_v1!(re_drop_calcit_ffi_v1, re_drop);
 
 #[cfg(test)]
 mod tests {
