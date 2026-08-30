@@ -74,6 +74,15 @@ come from the shared
 [`calcit_native_ffi`](https://github.com/calcit-lang/calcit-native-ffi). This
 repository keeps only regex behavior and the opaque-resource registry.
 
+The typed native contract can be audited without loading the dylib:
+
+```bash
+calcit calcit.cirru ffi export --json --ns regex.core
+```
+
+该命令只读导出版本化 Interface IR，并明确展示 resource constructor、borrow
+语义以及暂不可生成的动态 one-shot 边界。
+
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
 ### Workflow
