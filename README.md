@@ -52,6 +52,10 @@ let
 regex.core/compile |[
 ```
 
+See [Compiled regex patterns](docs/compiled-patterns.md) for choosing the
+one-shot and compiled APIs, handling `Option`/`Result`, and retaining native
+resource ownership safely. The page is indexed by `calcit docs read/search`.
+
 Compiled patterns use Calcit C-safe opaque resource v1. The dylib keeps each
 `Regex` in a generation-checked registry; Calcit owns the resource lease and
 releases it automatically after the final reference is dropped. No Rust
