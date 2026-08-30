@@ -81,7 +81,8 @@
           :examples $ []
             quote $ assert |invalid-pattern-should-return-err
               result:err? $ compile |[
-          :ffi $ {} (:backend :native) (:symbol |re_compile_result)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :resource-constructor) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
+            :resource $ {} (:protocol :opaque-resource-v1) (:result :own)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String
@@ -163,7 +164,7 @@
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text pattern
                 if (nil? found) (%none) (%some found)
           :examples $ []
-          :ffi $ {} (:backend :native) (:symbol |re_find_index_optional)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :dylib-method) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String 'Dynamic
@@ -175,7 +176,7 @@
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text pattern
                 if (nil? found) (%none) (%some found)
           :examples $ []
-          :ffi $ {} (:backend :native) (:symbol |re_find_optional)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :dylib-method) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String 'Dynamic
@@ -218,7 +219,9 @@
             defn re-source (pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_source pattern
           :examples $ []
-          :ffi $ {} (:backend :native) (:symbol |re_source)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :resource-method) (:symbol |re_source) (:transport :edn-buffer-v1)
+            :resource $ {} (:protocol :opaque-resource-v1)
+              :parameters $ {} (0 :borrow)
           :schema $ :: 'Fn
             {} (:return 'String)
               :args $ [] 'Dynamic
