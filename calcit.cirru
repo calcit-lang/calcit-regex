@@ -12,10 +12,10 @@
           :code $ quote
             def Regex $ impl-traits Regex0 RegexImpl
           :examples $ []
-          :schema $ :: 'Dynamic
-        'Regex0 $ %{} 'CodeEntry (:doc "|Nominal wrapper around an immutable compiled regex handle.")
+          :schema $ :: 'Impl
+        'Regex0 $ %{} 'CodeEntry (:doc "|Base struct definition for the public Regex type; attach RegexImpl through the Regex constructor.")
           :code $ quote
-            defstruct Regex0 $ :handle 'Dynamic
+            defstruct Regex $ :handle 'Dynamic
           :examples $ []
           :schema $ :: 'StructDef
         'RegexImpl $ %{} 'CodeEntry (:doc |)
@@ -42,35 +42,35 @@
             deftrait RegexTrait
               .matches? $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String
+                  :args $ [] 'regex.core/Regex 'String
                   :return 'Bool
               .find $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String
+                  :args $ [] 'regex.core/Regex 'String
                   :return $ :: 'Option 'String
               .find-index $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String
+                  :args $ [] 'regex.core/Regex 'String
                   :return $ :: 'Option 'Number
               .find-all $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String
+                  :args $ [] 'regex.core/Regex 'String
                   :return $ :: 'List 'String
               .split $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String
+                  :args $ [] 'regex.core/Regex 'String
                   :return $ :: 'List 'String
               .replace-all $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0 'String 'String
+                  :args $ [] 'regex.core/Regex 'String 'String
                   :return 'String
               .source $ :: 'Fn
                 {}
-                  :args $ [] 'regex.core/Regex0
+                  :args $ [] 'regex.core/Regex
                   :return 'String
           :examples $ []
           :schema $ :: 'Trait
-        'compile $ %{} 'CodeEntry (:doc "|Compile a regex pattern into Result<Regex0, String> without raising on invalid syntax.")
+        'compile $ %{} 'CodeEntry (:doc "|Compile a regex pattern into Result<Regex, String> without raising on invalid syntax.")
           :code $ quote
             defn compile (pattern)
               match
@@ -81,12 +81,11 @@
           :examples $ []
             quote $ assert |invalid-pattern-should-return-err
               result:err? $ compile |[
-          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :resource-constructor) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
-            :resource $ {} (:protocol :opaque-resource-v1) (:result :own)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String
-              :return $ :: 'Result 'regex.core/Regex0 'String
+              :return $ :: 'Result 'regex.core/Regex 'String
           :tests $ []
             %{} 'TestEntry (:name |compiled-methods-preserve-option-semantics)
               :code $ quote
@@ -114,7 +113,7 @@
                 pattern $ compile! |\d+
               assert= (%some |4) (.find pattern |a4)
           :schema $ :: 'Fn
-            {} (:return 'regex.core/Regex0)
+            {} (:return 'regex.core/Regex)
               :args $ [] 'String
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote
@@ -164,7 +163,7 @@
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text pattern
                 if (nil? found) (%none) (%some found)
           :examples $ []
-          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :dylib-method) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String 'Dynamic
@@ -176,7 +175,7 @@
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text pattern
                 if (nil? found) (%none) (%some found)
           :examples $ []
-          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :dylib-method) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
               :args $ [] 'String 'Dynamic
@@ -219,9 +218,7 @@
             defn re-source (pattern)
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_source pattern
           :examples $ []
-          :ffi $ {} (:backend :native) (:invoke :sync) (:kind :resource-method) (:symbol |re_source) (:transport :edn-buffer-v1)
-            :resource $ {} (:protocol :opaque-resource-v1)
-              :parameters $ {} (0 :borrow)
+          :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_source) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {} (:return 'String)
               :args $ [] 'Dynamic
