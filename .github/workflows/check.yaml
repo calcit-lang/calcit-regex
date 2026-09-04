@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: calcit-lang/setup-calcit@v1.3.0
+      - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1.4.0
 
       - name: Validate Calcit snapshot and type baseline
         run: |

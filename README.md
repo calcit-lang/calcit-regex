@@ -80,8 +80,10 @@ The typed native contract can be audited without loading the dylib:
 calcit calcit.cirru ffi export --json --ns regex.core
 ```
 
-该命令只读导出版本化 Interface IR，并明确展示 resource constructor、borrow
-语义以及暂不可生成的动态 one-shot 边界。
+该命令只读导出 Interface IR v2 的稳定调用边界：backend、symbol、invoke 与
+transport。资源 registry、generation check 与最终引用自动 release 由模块和运行时
+adapter 内部管理，不要求 Calcit 调用方声明 ownership/borrow 元数据；`Regex` 和
+动态 one-shot 输入继续作为暂不可生成的显式 diagnostic。
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 

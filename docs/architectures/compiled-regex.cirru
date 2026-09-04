@@ -8,18 +8,18 @@
     'regex.core/Regex0 $ {}
       :mode :ensure
       :kind :data
-      :doc "|Nominal wrapper around an immutable compiled regex handle."
-      :schema $ :: 'Dynamic
-      :code $ quote (defstruct Regex0 (:handle 'Dynamic))
+      :doc "|Base struct definition for the public Regex type."
+      :schema $ :: 'StructDef
+      :code $ quote (defstruct Regex (:handle 'Dynamic))
     'regex.core/compile $ {}
       :mode :ensure
       :kind :fn
-      :doc "|Compile a regex pattern into Result<Regex0, String> without raising on invalid syntax."
+      :doc "|Compile a regex pattern into Result<Regex, String> without raising on invalid syntax."
       :params $ [] 'pattern
       :schema $ :: :fn
         {}
           :args $ [] 'String
-          :return $ :: 'Result 'regex.core/Regex0 'String
+          :return $ :: 'Result 'regex.core/Regex 'String
     'regex.core/compile! $ {}
       :mode :ensure
       :kind :fn
@@ -28,8 +28,8 @@
       :schema $ :: :fn
         {}
           :args $ [] 'String
-          :return 'regex.core/Regex0
+          :return 'regex.core/Regex
   :edges $ #{}
-    :: :type 'regex.core/compile 'regex.core/Regex0
-    :: :type 'regex.core/compile! 'regex.core/Regex0
+    :: :type 'regex.core/compile 'regex.core/Regex
+    :: :type 'regex.core/compile! 'regex.core/Regex
     :: :call 'regex.core/compile! 'regex.core/compile
