@@ -10,23 +10,27 @@ APIs:
 
 ```cirru
 regex.core/re-matches |2 |\d
+
 ; "returns bool"
 
 ; "find first matched item"
+
 regex.core/re-find |a4 |\d
+
 regex.core/re-find-index |a1 |\d
 
 regex.core/re-find-all |123 |\d+
 
-
 regex.core/re-replace-all |1ab22c333 |\d{2} "\"X"
+
 ; |1abXcX3
 
-
 regex.core/re-split |1ab22c333 |\d{2}
+
 ; [] "\"1ab" "\"c" "\"3"
 
 regex.core/re-pattern |\d+
+
 ; "creates an automatically managed native regex resource"
 ```
 
@@ -43,12 +47,13 @@ or `-1` sentinels:
 ```cirru
 let
     pattern $ regex.core/compile! |\d+
-  assert= (%some |4) $ .find pattern |a4
-  assert= (%none) $ .find pattern |abc
-  assert= (%some 1) $ .find-index pattern |a4
-  assert= ([] |1 |2) $ .find-all pattern |a1b2
+  assert= (%some |4) (.find pattern |a4)
+  assert= (%none) (.find pattern |abc)
+  assert= (%some 1) (.find-index pattern |a4)
+  assert= ([] |1 |2) (.find-all pattern |a1b2)
 
 ; "invalid syntax stays in typed error flow"
+
 regex.core/compile |[
 ```
 
