@@ -2,6 +2,10 @@
 
 > Rust library for Calcit runtime.
 
+Requires Calcit 0.14.5. Module release 0.0.20 enables strict type checking;
+the only remaining open schemas are the host-managed opaque regex resource
+boundary, which is locked by the committed quality baseline.
+
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
 ### Usages
@@ -47,10 +51,12 @@ or `-1` sentinels:
 ```cirru
 let
     pattern $ regex.core/compile! |\d+
-  assert= (%some |4) (.find pattern |a4)
-  assert= (%none) (.find pattern |abc)
-  assert= (%some 1) (.find-index pattern |a4)
-  assert= ([] |1 |2) (.find-all pattern |a1b2)
+  assert |finds-digit $ &= |4
+    option:unwrap $ .find pattern |a4
+  assert |missing-digit $ option:none? (.find pattern |abc)
+  assert |finds-index $ &= 1
+    option:unwrap $ .find-index pattern |a4
+  assert |finds-all $ &= ([] |1 |2) (.find-all pattern |a1b2)
 
 ; "invalid syntax stays in typed error flow"
 

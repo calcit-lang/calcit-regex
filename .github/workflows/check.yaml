@@ -12,19 +12,24 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1.4.0
 
       - name: Validate Calcit snapshot and type baseline
         run: |
-          caps --ci
+          test "$(calcit -v)" = "0.14.5"
+          caps --strict --ci
+          caps verify --toolchain
           calcit calcit.cirru edit format
           git diff --exit-code -- calcit.cirru
-          calcit calcit.cirru --check-only
+          calcit calcit.cirru --warn-dyn-method --check-only
+          calcit calcit.cirru analyze check-public --ns regex.core --summary-only --format json
           calcit calcit.cirru analyze check-types --summary-only --format json
-          calcit calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json
+          calcit calcit.cirru analyze weak-types --only schema-dynamic,unresolved-type-slot,code-dynamic --intent unresolved --summary-only --format json
+          calcit calcit.cirru analyze dynamic-methods --max 0 --summary-only --format json
           calcit calcit.cirru analyze deprecated --summary-only --format json
+          calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru --format json
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -41,4 +46,12 @@ jobs:
 
       - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 
-      - run: calcit --trace-ffi calcit.cirru
+      - name: Validate Calcit behavior and documentation
+        run: |
+          calcit calcit.cirru analyze check-examples --ns regex.core
+          calcit calcit.cirru test --require-match
+          calcit calcit.cirru docs format-md README.md --check
+          calcit calcit.cirru docs format-md docs/compiled-patterns.md --check
+          calcit calcit.cirru docs check-md README.md --failures-only
+          calcit calcit.cirru docs check-md docs/compiled-patterns.md --failures-only
+          calcit --trace-ffi calcit.cirru

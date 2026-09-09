@@ -1,7 +1,7 @@
 
 {} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --full` first. Manual edits must follow format and schema conventions, then run `calcit edit format`.") (:package |regex)
   :entries $ {}
-    :default $ {} (:description |) (:init-fn 'regex.test/main!) (:mode :native) (:reload-fn 'regex.test/main!)
+    :default $ {} (:description |) (:init-fn 'regex.test/main!) (:mode :native) (:reload-fn 'regex.test/main!) (:target :native)
       :feature-policy $ {}
       :modules $ []
       :type-slots $ {}
@@ -77,7 +77,8 @@
                 &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_compile_result pattern
                 (:ok handle)
                   %ok $ %{} Regex (:handle handle)
-                (:err message) (%err message)
+                (:err message)
+                  %err $ assert-type message 'String
           :examples $ []
             quote $ assert |invalid-pattern-should-return-err
               result:err? $ compile |[
@@ -85,6 +86,7 @@
           :schema $ :: 'Fn
             {}
               :args $ [] 'String
+              :features $ #{} :js-ffi
               :return $ :: 'Result 'regex.core/Regex 'String
           :tests $ []
             %{} 'TestEntry (:name |compiled-methods-preserve-option-semantics)
@@ -94,14 +96,16 @@
                   let
                       digits $ compile! |\d+
                       start $ compile! |^
-                    assert= (%some |4) (.find digits |a4)
-                    assert= (%none) (.find digits |abc)
-                    assert= (%some |) (.find start |abc)
-                    assert= (%some 1) (.find-index digits |a4)
-                    assert= ([] |1 |2) (.find-all digits |a1b2)
-                    assert= |aXbX $ .replace-all digits |a1b2 |X
-                    assert= |\d+ $ .source digits
-              :tags $ #{} :unit
+                    assert |find-digit $ &= |4
+                      option:unwrap $ .find digits |a4
+                    assert |missing-digit $ option:none? (.find digits |abc)
+                    assert |empty-start-match $ &= |
+                      option:unwrap $ .find start |abc
+                    assert |find-index $ &= 1
+                      option:unwrap $ .find-index digits |a4
+                    assert |find-all $ &= ([] |1 |2) (.find-all digits |a1b2)
+                    assert |replace-all $ &= |aXbX (.replace-all digits |a1b2 |X)
+                    assert |source $ &= |\d+ (.source digits)
         'compile! $ %{} 'CodeEntry (:doc "|Compile a regex pattern and raise its validation message on failure.")
           :code $ quote
             defn compile! (pattern)
@@ -109,9 +113,10 @@
                 (:ok value) value
                 (:err message) (raise message)
           :examples $ []
-            quote $ let
-                pattern $ compile! |\d+
-              assert= (%some |4) (.find pattern |a4)
+            quote $ []
+              quote $ let
+                  pattern $ compile! |\d+
+                assert |compiled-pattern-finds-digit $ &= (%some |4) (.find pattern |a4)
           :schema $ :: 'Fn
             {} (:return 'regex.core/Regex)
               :args $ [] 'String
@@ -134,7 +139,8 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {} (:return 'String)
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :generics $ [] 'P
         're-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-find-all (s pattern)
@@ -144,7 +150,8 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {}
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :generics $ [] 'P
               :return $ :: 'List 'String
         're-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote
@@ -155,30 +162,37 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {} (:return 'Number)
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :generics $ [] 'P
         're-find-index-option $ %{} 'CodeEntry (:doc "|Find the first match index as Option<Number> instead of using -1 as a sentinel.")
           :code $ quote
             defn re-find-index-option (text pattern)
               let
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text pattern
-                if (nil? found) (%none) (%some found)
+                if (nil? found) (%none)
+                  %some $ assert-type found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :features $ #{} :js-ffi
+              :generics $ [] 'P
               :return $ :: 'Option 'Number
         're-find-option $ %{} 'CodeEntry (:doc "|Find the first match as Option<String>, preserving an empty match as Some empty-string.")
           :code $ quote
             defn re-find-option (text pattern)
               let
                   found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text pattern
-                if (nil? found) (%none) (%some found)
+                if (nil? found) (%none)
+                  %some $ assert-type found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn
             {}
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :features $ #{} :js-ffi
+              :generics $ [] 'P
               :return $ :: 'Option 'String
         're-matches $ %{} 'CodeEntry (:doc |)
           :code $ quote
@@ -189,7 +203,8 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {} (:return 'Bool)
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :generics $ [] 'P
         're-pattern $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn re-pattern (pattern)
@@ -212,7 +227,8 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {} (:return 'String)
-              :args $ [] 'String 'Dynamic 'String
+              :args $ [] 'String 'P 'String
+              :generics $ [] 'P
         're-source $ %{} 'CodeEntry (:doc "|Read the source string from a compiled regex pattern.")
           :code $ quote
             defn re-source (pattern)
@@ -231,7 +247,8 @@
             :features $ #{} :js-ffi
           :schema $ :: 'Fn
             {}
-              :args $ [] 'String 'Dynamic
+              :args $ [] 'String 'P
+              :generics $ [] 'P
               :return $ :: 'List 'String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
@@ -240,42 +257,51 @@
             regex.util :refer $ get-dylib-path
     'regex.test $ %{} 'FileEntry
       :defs $ {}
+        'check-equal $ %{} 'CodeEntry (:doc |)
+          :code $ quote
+            defn check-equal (expected actual)
+              assert |values-should-equal $ &= expected actual
+          :examples $ []
+          :schema $ :: 'Fn
+            {} (:return 'Unit)
+              :args $ [] 'T 'T
+              :generics $ [] 'T
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! () (println "|%%%% test for regex") (println "|Test regular expression")
-              assert= true $ re-matches |2 |\d
-              assert= true $ re-matches |23 |\d+
-              assert= false $ re-matches |a |\d
-              assert= |4 $ re-find |a4 |\d
-              assert= 1 $ re-find-index |a1 |\d
-              assert= -1 $ re-find-index |aa |\d
-              assert= ([] |1 |2 |3) (re-find-all |123 |\d)
-              assert= ([] |123) (re-find-all |123 |\d+)
-              assert= ([] |1 |2 |3) (re-find-all |1a2a3 |\d+)
-              assert= ([] |1 |2 |34) (re-find-all |1a2a34 |\d+)
-              assert= |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} |X
-              assert= ([] |1ab |c |3) (re-split |1ab22c333 |\d{2})
+              check-equal true $ re-matches |2 |\d
+              check-equal true $ re-matches |23 |\d+
+              check-equal false $ re-matches |a |\d
+              check-equal |4 $ re-find |a4 |\d
+              check-equal 1 $ re-find-index |a1 |\d
+              check-equal -1 $ re-find-index |aa |\d
+              check-equal ([] |1 |2 |3) (re-find-all |123 |\d)
+              check-equal ([] |123) (re-find-all |123 |\d+)
+              check-equal ([] |1 |2 |3) (re-find-all |1a2a3 |\d+)
+              check-equal ([] |1 |2 |34) (re-find-all |1a2a34 |\d+)
+              check-equal |1abXcX3 $ re-replace-all |1ab22c333 |\d{2} |X
+              check-equal ([] |1ab |c |3) (re-split |1ab22c333 |\d{2})
               println "|%%% test variable holding regex"
               let
                   pattern $ re-pattern |\d+
                 println "|Pattern is:" pattern
-                assert= true $ re-matches |2 pattern
-                assert= true $ re-matches |23 pattern
-                assert= false $ re-matches |qq pattern
-                assert= |22 $ re-find |q22 pattern
-                assert= ([] |1 |2 |3) (re-find-all |1q2q3 pattern)
-                assert= |XabXcX $ re-replace-all |1ab22c333 pattern |X
+                check-equal true $ re-matches |2 pattern
+                check-equal true $ re-matches |23 pattern
+                check-equal false $ re-matches |qq pattern
+                check-equal |22 $ re-find |q22 pattern
+                check-equal ([] |1 |2 |3) (re-find-all |1q2q3 pattern)
+                check-equal |XabXcX $ re-replace-all |1ab22c333 pattern |X
                 println "|Regex tests passed"
               let
                   compiled $ compile! |\d+
-                assert= true $ .matches? compiled |a4
-                assert= (%some |4) (.find compiled |a4)
-                assert= (%none) (.find compiled |abc)
-                assert= (%some 1) (.find-index compiled |a4)
-                assert= ([] |1 |2) (.find-all compiled |a1b2)
-                assert= ([] |a |b |) (.split compiled |a1b2)
-                assert= |aXbX $ .replace-all compiled |a1b2 |X
-                assert= |\d+ $ .source compiled
+                check-equal true $ .matches? compiled |a4
+                check-equal (%some |4) (.find compiled |a4)
+                check-equal (%none) (.find compiled |abc)
+                check-equal (%some 1) (.find-index compiled |a4)
+                check-equal ([] |1 |2) (.find-all compiled |a1b2)
+                check-equal ([] |a |b |) (.split compiled |a1b2)
+                check-equal |aXbX $ .replace-all compiled |a1b2 |X
+                check-equal |\d+ $ .source compiled
                 println |Compiled-regex-methods-passed
           :examples $ []
           :schema $ :: 'Fn

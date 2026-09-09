@@ -28,8 +28,7 @@ Use the one-shot `re-*` functions for occasional matching. Compile once when the
 ```cirru.no-check
 let
     compiled $ regex.core/compile |\\d+
-  compiled.map $ fn (pattern)
-    pattern.find |item-42
+  compiled.map $ fn (pattern) (pattern.find |item-42)
 ```
 
 The nominal `Regex` value implements `RegexTrait`. Its methods expose `.matches?`, `.find`, `.find-index`, `.find-all`, `.split`, `.replace-all`, and `.source`. `.find` and `.find-index` return `Option`, so an empty match remains distinguishable from no match and indexes do not require a `-1` sentinel.
