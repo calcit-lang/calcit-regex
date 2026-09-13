@@ -51,11 +51,9 @@ or `-1` sentinels:
 ```cirru
 let
     pattern $ regex.core/compile! |\d+
-  assert |finds-digit $ &= |4
-    option:unwrap $ .find pattern |a4
-  assert |missing-digit $ option:none? (.find pattern |abc)
-  assert |finds-index $ &= 1
-    option:unwrap $ .find-index pattern |a4
+  assert |finds-digit $ &= |4 $ option:unwrap (.find pattern |a4)
+  assert |missing-digit $ option:none? $ .find pattern |abc
+  assert |finds-index $ &= 1 $ option:unwrap (.find-index pattern |a4)
   assert |finds-all $ &= ([] |1 |2) (.find-all pattern |a1b2)
 
 ; "invalid syntax stays in typed error flow"
