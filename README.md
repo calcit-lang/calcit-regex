@@ -2,7 +2,7 @@
 
 > Rust library for Calcit runtime.
 
-Requires Calcit 0.14.16. Module release 0.0.21 enables strict type checking;
+Requires Calcit 0.15.3. Module release 0.0.21 enables strict type checking;
 the only remaining open schemas are the host-managed opaque regex resource
 boundary, which is locked by the committed quality baseline.
 
