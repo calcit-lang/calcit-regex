@@ -18,7 +18,7 @@ jobs:
 
       - name: Validate Calcit snapshot and type baseline
         run: |
-          test "$(calcit -v)" = "0.17.1"
+          test "$(calcit -v)" = "0.18.1"
           caps --strict --ci
           caps verify --toolchain
           calcit calcit.cirru edit format
