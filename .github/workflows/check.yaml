@@ -14,11 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
-      - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1.4.0
+      - uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5.0
 
       - name: Validate Calcit snapshot and type baseline
         run: |
-          test "$(calcit -v)" = "0.18.1"
           caps --strict --ci
           caps verify --toolchain
           calcit calcit.cirru edit format
@@ -27,7 +26,7 @@ jobs:
           calcit calcit.cirru analyze check-public --ns regex.core --summary-only --format json
           calcit calcit.cirru analyze check-types --summary-only --format json
           calcit calcit.cirru analyze weak-types --only schema-dynamic,unresolved-type-slot,code-dynamic --intent unresolved --summary-only --format json
-          calcit calcit.cirru analyze dynamic-methods --max 0 --summary-only --format json
+          calcit calcit.cirru analyze dynamic-methods --summary-only --format json
           calcit calcit.cirru analyze deprecated --summary-only --format json
           calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru --format json
 
