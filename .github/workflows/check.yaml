@@ -7,14 +7,23 @@ on:
 
 name: Test
 
+permissions:
+  contents: read
+
 jobs:
   build_and_test:
     name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5.0
+      - uses: calcit-lang/setup-calcit@v1.5.0
+        with:
+          tools: calcit,caps
+          caps-version: "0.1.1"
 
       - name: Validate Calcit snapshot and type baseline
         run: |
@@ -24,10 +33,6 @@ jobs:
           git diff --exit-code -- calcit.cirru
           calcit calcit.cirru --warn-dyn-method --check-only
           calcit calcit.cirru analyze check-public --ns regex.core --summary-only --format json
-          calcit calcit.cirru analyze check-types --summary-only --format json
-          calcit calcit.cirru analyze weak-types --only schema-dynamic,unresolved-type-slot,code-dynamic --intent unresolved --summary-only --format json
-          calcit calcit.cirru analyze dynamic-methods --summary-only --format json
-          calcit calcit.cirru analyze deprecated --summary-only --format json
           calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru --format json
 
       - uses: dtolnay/rust-toolchain@stable
@@ -37,7 +42,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
-      - run: cargo test
+      - run: cargo fmt --check
+
+      - run: cargo test --locked
 
       - run: cargo clippy --all-targets -- -D warnings
 

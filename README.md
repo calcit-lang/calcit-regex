@@ -2,9 +2,16 @@
 
 > Rust library for Calcit runtime.
 
-Requires Calcit 0.17.1. Module release 0.0.22 enables strict type checking;
+This migration targets stable Calcit 0.28.0; the module version remains 0.0.24.
+The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
+Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
 boundary, which is locked by the committed quality baseline.
+
+本轮迁移清理九处旧 Option/Result 构造写法，保留原资源生命周期、错误和空匹配语义。
+质量基线不放宽：三个原有 opaque resource 类型槽仍保留，废弃调用和 unsafe coercion 均为零。
+CI 保留严格入口、全部公开 API、质量预算、Rust 与原生动态库测试及文档检查；删除重复的报告型扫描，
+不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 

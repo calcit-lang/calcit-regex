@@ -14,7 +14,7 @@
           :doc "|Compiled regex constructor with RegexTrait methods attached."
           :code $ quote $ def Regex (impl-traits Regex0 RegexImpl)
           :examples $ []
-          :schema $ :: 'Impl
+          :schema $ :: 'StructDef
         'Regex0 $ %{} 'CodeEntry
           :doc "|Base struct definition for the public Regex type; attach RegexImpl through the Regex constructor."
           :code $ quote $ defstruct Regex (:handle 'Dynamic)
@@ -70,9 +70,9 @@
             match
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_compile_result pattern
               (:ok handle)
-                %ok $ %{} Regex $ :handle handle
+                Result :ok $ %{} Regex $ :handle handle
               (:err message)
-                %err $ assert-type message 'String
+                Result :err $ assert-type message 'String
           :examples $ [] $ quote
             assert |invalid-pattern-should-return-err $ result:err? $ compile |[
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
@@ -142,8 +142,8 @@
           :code $ quote $ defn re-find-index-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text pattern
-              if (nil? found) (%none)
-                %some $ assert-type found 'Number
+              if (nil? found) (Option :none)
+                Option :some $ assert-type found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {}
@@ -156,8 +156,8 @@
           :code $ quote $ defn re-find-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text pattern
-              if (nil? found) (%none)
-                %some $ assert-type found 'String
+              if (nil? found) (Option :none)
+                Option :some $ assert-type found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {}
@@ -250,9 +250,9 @@
             let
                 compiled $ compile! |\d+
               check-equal true $ .matches? compiled |a4
-              check-equal (%some |4) (.find compiled |a4)
-              check-equal (%none) (.find compiled |abc)
-              check-equal (%some 1) (.find-index compiled |a4)
+              check-equal (Option :some |4) (.find compiled |a4)
+              check-equal (Option :none) (.find compiled |abc)
+              check-equal (Option :some 1) (.find-index compiled |a4)
               check-equal ([] |1 |2) (.find-all compiled |a1b2)
               check-equal ([] |a |b |) (.split compiled |a1b2)
               check-equal |aXbX $ .replace-all compiled |a1b2 |X
