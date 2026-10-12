@@ -23,19 +23,40 @@
         'RegexImpl $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defimpl RegexImpl RegexTrait
             .matches? $ fn (self text)
-              re-matches text $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String
+                :return 'Bool
+              re-matches text $ :handle self
             .find $ fn (self text)
-              re-find-option text $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String
+                :return $ :: 'Option 'String
+              re-find-option text $ :handle self
             .find-index $ fn (self text)
-              re-find-index-option text $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String
+                :return $ :: 'Option 'Number
+              re-find-index-option text $ :handle self
             .find-all $ fn (self text)
-              re-find-all text $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String
+                :return $ :: 'List 'String
+              re-find-all text $ :handle self
             .split $ fn (self text)
-              re-split text $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String
+                :return $ :: 'List 'String
+              re-split text $ :handle self
             .replace-all $ fn (self text replacement)
-              re-replace-all text (&struct:get self :handle) replacement
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex 'String 'String
+                :return 'String
+              re-replace-all text (:handle self) replacement
             .source $ fn (self)
-              re-source $ &struct:get self :handle
+              hint-fn $ {}
+                :args $ [] 'regex.core/Regex
+                :return 'String
+              re-source $ :handle self
           :examples $ []
           :schema $ :: 'Impl
         'RegexTrait $ %{} 'CodeEntry
@@ -74,7 +95,7 @@
               (:err message)
                 Result :err $ assert-type message 'String
           :examples $ [] $ quote
-            assert |invalid-pattern-should-return-err $ result:err? $ compile |[
+            assert |invalid-pattern-should-return-err $ .err? $ compile |[
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {}
             :args $ [] 'String
@@ -82,14 +103,14 @@
             :return $ :: 'Result 'regex.core/Regex 'String
           :tests $ [] $ %{} 'TestEntry (:name |compiled-methods-preserve-option-semantics)
             :code $ quote $ do
-              assert |invalid-pattern-should-return-err $ result:err? $ compile |[
+              assert |invalid-pattern-should-return-err $ .err? $ compile |[
               let
                   digits $ compile! |\d+
                   start $ compile! |^
-                assert |find-digit $ &= |4 $ option:unwrap (.find digits |a4)
-                assert |missing-digit $ option:none? $ .find digits |abc
-                assert |empty-start-match $ &= | $ option:unwrap (.find start |abc)
-                assert |find-index $ &= 1 $ option:unwrap (.find-index digits |a4)
+                assert |find-digit $ &= |4 $ .unwrap (.find digits |a4)
+                assert |missing-digit $ .none? $ .find digits |abc
+                assert |empty-start-match $ &= | $ .unwrap (.find start |abc)
+                assert |find-index $ &= 1 $ .unwrap (.find-index digits |a4)
                 assert |find-all $ &= ([] |1 |2) (.find-all digits |a1b2)
                 assert |replace-all $ &= |aXbX $ .replace-all digits |a1b2 |X
                 assert |source $ &= |\d+ $ .source digits
@@ -270,7 +291,7 @@
       :defs $ {}
         'get-dylib-ext $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro get-dylib-ext ()
-            case-default (&get-os) |.so (:macos |.dylib) (:windows |.dll)
+            match (&get-os) (:macos |.dylib) (:windows |.dll) (_ |.so)
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Macro $ {}
