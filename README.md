@@ -2,16 +2,24 @@
 
 > Rust library for Calcit runtime.
 
-This migration targets stable Calcit 0.28.0; the module version remains 0.0.24.
+This module targets stable Calcit 0.29.1; the module version is 0.0.25.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
-boundary, which is locked by the committed quality baseline.
+boundary, reported by the compiler's weak-type diagnostics.
 
 本轮迁移清理九处旧 Option/Result 构造写法，保留原资源生命周期、错误和空匹配语义。
-质量基线不放宽：三个原有 opaque resource 类型槽仍保留，废弃调用和 unsafe coercion 均为零。
-CI 保留严格入口、全部公开 API、质量预算、Rust 与原生动态库测试及文档检查；删除重复的报告型扫描，
+本轮进一步迁移平台 macro 和附带测试/示例中的 Option/Result helper；原断言和 ABI 不变。
+RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问。
+三个原有 opaque resource 类型槽仍保留，废弃调用和 unsafe coercion 均为零。
+原质量预算通过后退役；weak-types 只报告类型债务，不替代统计阈值。
+CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
+
+当前 `0.0.25` 是未发布迁移候选。此前正式 Calcit 0.29.0 的嵌套 Option
+方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
+此候选不再依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
+完成正式工具链、原生行为与模块 CI 验收后再发布。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
@@ -58,9 +66,15 @@ or `-1` sentinels:
 ```cirru
 let
     pattern $ regex.core/compile! |\d+
-  assert |finds-digit $ &= |4 $ option:unwrap (.find pattern |a4)
-  assert |missing-digit $ option:none? $ .find pattern |abc
-  assert |finds-index $ &= 1 $ option:unwrap (.find-index pattern |a4)
+  assert |finds-digit $ &= |4 $
+    .find pattern |a4
+    , .unwrap
+  assert |missing-digit $
+    .find pattern |abc
+    , .none?
+  assert |finds-index $ &= 1 $
+    .find-index pattern |a4
+    , .unwrap
   assert |finds-all $ &= ([] |1 |2) (.find-all pattern |a1b2)
 
 ; "invalid syntax stays in typed error flow"

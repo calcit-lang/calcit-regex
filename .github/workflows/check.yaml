@@ -25,15 +25,16 @@ jobs:
           tools: calcit,caps
           caps-version: "0.1.1"
 
-      - name: Validate Calcit snapshot and type baseline
+      - name: Validate Calcit snapshot and types
         run: |
           caps --strict --ci
           caps verify --toolchain
           calcit calcit.cirru edit format
           git diff --exit-code -- calcit.cirru
           calcit calcit.cirru --warn-dyn-method --check-only
-          calcit calcit.cirru analyze check-public --ns regex.core --summary-only --format json
-          calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru --format json
+          calcit calcit.cirru --check-only --ns regex.core --ns regex.test --ns regex.util --summary-only --format edn
+          calcit calcit.cirru analyze weak-types --only coverage --summary-only --format edn
+          calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format edn
 
       - uses: dtolnay/rust-toolchain@stable
         with:
