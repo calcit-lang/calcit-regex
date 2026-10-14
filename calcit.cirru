@@ -93,7 +93,7 @@
               (:ok handle)
                 Result :ok $ %{} Regex $ :handle handle
               (:err message)
-                Result :err $ assert-type message 'String
+                Result :err $ decode-map-as message 'String
           :examples $ [] $ quote
             assert |invalid-pattern-should-return-err $ .err? $ compile |[
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
@@ -129,13 +129,16 @@
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-drop (pattern)
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop pattern
+            , &unit
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Dynamic
         're-find $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find (s pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s pattern
+              , 'String
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'String)
@@ -143,7 +146,9 @@
             :generics $ [] 'P
         're-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-all (s pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s pattern
+              :: 'List 'String
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {}
@@ -152,7 +157,9 @@
             :return $ :: 'List 'String
         're-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-index (s pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s pattern
+              , 'Number
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Number)
@@ -164,7 +171,7 @@
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text pattern
               if (nil? found) (Option :none)
-                Option :some $ assert-type found 'Number
+                Option :some $ decode-map-as found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {}
@@ -178,7 +185,7 @@
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text pattern
               if (nil? found) (Option :none)
-                Option :some $ assert-type found 'String
+                Option :some $ decode-map-as found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {}
@@ -188,7 +195,9 @@
             :return $ :: 'Option 'String
         're-matches $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-matches (s pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s pattern
+              , 'Bool
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Bool)
@@ -206,7 +215,9 @@
             :args $ [] 'String
         're-replace-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-replace-all (s pattern next)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s pattern next
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s pattern next
+              , 'String
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'String)
@@ -215,14 +226,18 @@
         're-source $ %{} 'CodeEntry
           :doc "|Read the source string from a compiled regex pattern."
           :code $ quote $ defn re-source (pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_source pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_source pattern
+              , 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_source) (:transport :edn-buffer-v1)
           :schema $ :: 'Fn $ {} (:return 'String)
             :args $ [] 'Dynamic
         're-split $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-split (s pattern)
-            &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s pattern
+            decode-map-as
+              &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s pattern
+              :: 'List 'String
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {}
@@ -279,6 +294,7 @@
               check-equal |aXbX $ .replace-all compiled |a1b2 |X
               check-equal |\d+ $ .source compiled
               println |Compiled-regex-methods-passed
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
