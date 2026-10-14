@@ -2,7 +2,7 @@
 
 > Rust library for Calcit runtime.
 
-This module targets stable Calcit 0.29.1; the module version is 0.0.25.
+This module targets stable Calcit 0.29.3; the candidate module version is 0.0.26.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
@@ -16,7 +16,7 @@ RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问�
 CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
-当前 `0.0.25` 是未发布迁移候选。此前正式 Calcit 0.29.0 的嵌套 Option
+当前 `0.0.26` 是未发布迁移候选。此前正式 Calcit 0.29.0 的嵌套 Option
 方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
 此候选不再依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
 完成正式工具链、原生行为与模块 CI 验收后再发布。
@@ -107,7 +107,7 @@ repository keeps only regex behavior and the opaque-resource registry.
 The typed native contract can be audited without loading the dylib:
 
 ```bash
-calcit calcit.cirru ffi export --json --ns regex.core
+calcit calcit.cirru ffi export --format json --ns regex.core
 ```
 
 该命令只读导出 Interface IR v2 的稳定调用边界：backend、symbol、invoke 与
