@@ -2,7 +2,7 @@
 
 > Rust library for Calcit runtime.
 
-This module targets stable Calcit 0.29.3; the candidate module version is 0.0.26.
+This source targets stable Calcit 0.30.0; module 0.0.26 is already published.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
@@ -16,10 +16,12 @@ RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问�
 CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
-当前 `0.0.26` 是未发布迁移候选。此前正式 Calcit 0.29.0 的嵌套 Option
+当前 `0.0.26` 已正式发布。本轮仅更新工具链、CI 和说明，不修改 Snapshot、Rust、
+Cargo 依赖/lock、公开 API 或资源生命周期，不另发模块版本。此前正式 Calcit 0.29.0 的嵌套 Option
 方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
-此候选不再依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
-完成正式工具链、原生行为与模块 CI 验收后再发布。
+当前源码不依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
+0.30.1 尚无正式版，不引入 alpha/hash。CI 显式读取 deps.cirru 并使用已有 Cargo.lock，
+不增加编译器规则、验证脚本或类型预算。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
