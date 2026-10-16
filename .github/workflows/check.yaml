@@ -23,6 +23,7 @@ jobs:
       - uses: calcit-lang/setup-calcit@v1.5.0
         with:
           tools: calcit,caps
+          deps-file: deps.cirru
           caps-version: "0.1.1"
 
       - name: Validate Calcit snapshot and types
@@ -48,9 +49,9 @@ jobs:
 
       - run: cargo test --locked
 
-      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo clippy --all-targets --locked -- -D warnings
 
-      - run: cargo build --release
+      - run: cargo build --release --locked
 
       - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 

@@ -57,10 +57,10 @@ ownership or borrow state.
 Maintainers can inspect the deterministic contract without loading the dylib:
 
 ```bash
-calcit calcit.cirru ffi export --json --ns regex.core
+calcit calcit.cirru ffi export --format json --ns regex.core
 ```
 
-Interface IR v2 reports the resource-backed `Regex` field and the one-shot
+Interface IR v3 reports the resource-backed `Regex` field and the one-shot
 string-or-compiled inputs as explicit unsupported diagnostics for strict
 bindgen. They must not be silently generated as untyped boundaries. Calcit
 issue [#634](https://github.com/calcit-lang/calcit/issues/634) tracks the core
@@ -69,6 +69,6 @@ exporter's nominal-name lookup for this top-level `impl-traits` pattern.
 `compile` 与 `re-source` 的公开 FFI 元数据只记录稳定的 native backend、base
 symbol、sync invoke 与 `edn-buffer-v1` transport。opaque token registry、generation
 check、lease 与最终引用 release 由手写 adapter 和运行时内部管理，调用方不声明
-ownership/borrow 状态。Interface IR v2 会把资源封装的 `Regex` 字段以及 one-shot
+ownership/borrow 状态。Interface IR v3 会把资源封装的 `Regex` 字段以及 one-shot
 的字符串或 compiled 联合输入显示为严格 bindgen 的显式 unsupported diagnostic，
 不能静默生成无类型边界。
