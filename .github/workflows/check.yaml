@@ -33,6 +33,7 @@ jobs:
           calcit calcit.cirru edit format
           git diff --exit-code -- calcit.cirru
           calcit calcit.cirru --warn-dyn-method --check-only
+          calcit calcit.cirru --check-only --all-defs
           calcit calcit.cirru fix --workflow strict --verify --format json
           calcit calcit.cirru --check-only --ns regex.core --ns regex.test --ns regex.util --summary-only --format edn
           calcit calcit.cirru analyze weak-types --only coverage --summary-only --format edn
