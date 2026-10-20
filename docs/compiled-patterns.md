@@ -62,9 +62,11 @@ calcit calcit.cirru ffi export --format json --ns regex.core
 
 Interface IR v3 reports the resource-backed `Regex` field and the one-shot
 string-or-compiled inputs as explicit unsupported diagnostics for strict
-bindgen. They must not be silently generated as untyped boundaries. Calcit
-issue [#634](https://github.com/calcit-lang/calcit/issues/634) tracks the core
-exporter's nominal-name lookup for this top-level `impl-traits` pattern.
+bindgen. They must not be silently generated as untyped boundaries. The nominal-name
+lookup issue [#634](https://github.com/calcit-lang/calcit/issues/634) is resolved:
+on 0.30.1-alpha.5, the exporter resolves the public `Regex` name and reports its
+unsupported Dynamic resource field, not a missing declaration. These diagnostics
+do not mean strict bindgen can generate the handwritten resource adapter.
 
 `compile` 与 `re-source` 的公开 FFI 元数据只记录稳定的 native backend、base
 symbol、sync invoke 与 `edn-buffer-v1` transport。opaque token registry、generation
