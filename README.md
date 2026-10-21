@@ -2,7 +2,7 @@
 
 > Rust library for Calcit runtime.
 
-This source targets stable Calcit 0.30.0; module 0.0.26 is already published.
+This source targets Calcit 0.30.1-alpha.5; module 0.0.26 is already published.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
@@ -20,8 +20,10 @@ CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文�
 Cargo 依赖/lock、公开 API 或资源生命周期，不另发模块版本。此前正式 Calcit 0.29.0 的嵌套 Option
 方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
 当前源码不依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
-0.30.1 尚无正式版，不引入 alpha/hash。CI 显式读取 deps.cirru 并使用已有 Cargo.lock，
-不增加编译器规则、验证脚本或类型预算。
+本轮继续迁移到已发布的 Calcit 0.30.1-alpha.5；正式 0.30.1 的跨平台 CLI/npm
+配对发布尚未完整，不把候选版本称为正式版。本库仅运行 native，无 npm runtime 配对。
+CI 显式读取 deps.cirru 并使用已有 Cargo.lock，新增全部定义检查，保留原 strict、
+公开 API、Rust、动态库及文档测试，不增加编译器规则、验证脚本或类型预算。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
