@@ -2,7 +2,13 @@
 
 > Rust library for Calcit runtime.
 
-This source targets Calcit 0.30.1-alpha.5; module 0.0.26 is already published.
+使用者注意：候选模块 **0.0.27** 配对正式 Calcit **0.30.1**，本库仅运行 native，
+没有 npm runtime。需要重启原生进程并使用本机架构的动态库；不承诺 JS/WASM 支持。
+本次 Snapshot、Rust、Cargo 依赖/lock、公开 API 与资源生命周期均不变。
+版本号不代表已发布，精确正式验收和发布状态以 PR / Release 为准。
+
+This candidate targets formal Calcit 0.30.1. Module 0.0.26 remains the previously
+published version until the new tag is released.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
@@ -16,14 +22,16 @@ RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问�
 CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
-当前 `0.0.26` 已正式发布。本轮仅更新工具链、CI 和说明，不修改 Snapshot、Rust、
-Cargo 依赖/lock、公开 API 或资源生命周期，不另发模块版本。此前正式 Calcit 0.29.0 的嵌套 Option
+此前 `0.0.26` 已正式发布；以下源码迁移说明属于既有实现，不是本次重新改写。
+本轮仅更新工具链、CI 和说明，不修改 Snapshot、Rust、Cargo 依赖/lock、公开 API
+或资源生命周期，验收后另发模块 `0.0.27`。此前正式 Calcit 0.29.0 的嵌套 Option
 方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
 当前源码不依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
-本轮继续迁移到已发布的 Calcit 0.30.1-alpha.5；正式 0.30.1 的跨平台 CLI/npm
-配对发布尚未完整，不把候选版本称为正式版。本库仅运行 native，无 npm runtime 配对。
+本轮从既有 alpha.5 配对升级到正式 Calcit 0.30.1；此前 alpha 的验证不能冒充本次
+正式版本验收。本库仅运行 native，无 npm runtime 配对。
 CI 显式读取 deps.cirru 并使用已有 Cargo.lock，新增全部定义检查，保留原 strict、
-公开 API、Rust、动态库及文档测试，不增加编译器规则、验证脚本或类型预算。
+公开 API、Rust、动态库及文档测试，原 release 构建同时输出实际 ABI 导出供审阅。
+完整 strict 明确要求 passed 且 diagnostics 为空，不增加编译器规则、验证脚本或类型预算。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
