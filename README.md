@@ -22,7 +22,9 @@ RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问�
 CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
-本轮更新工具链、清理上述遗留元数据并精简说明，不修改 CI 或增加验证脚本。CI 从 deps.cirru 读取正式版本，
+本轮更新工具链、清理上述遗留元数据并精简说明，不增加验证脚本。消费者使用 `sh build.sh`，
+该入口执行 `cargo build --release --locked`，失败立即停止且不清空现有 dylibs；CI 复用同一入口，
+保留 ABI 导出检查并移除重复复制步骤。CI 从 deps.cirru 读取正式版本，
 使用已有 Cargo.lock，保留全部定义、strict、公开 API、Rust、动态库及文档测试，
 原 release 构建输出实际 ABI 导出供审阅；验收以本次精确提交的 CI 为准。
 完整 strict 明确要求 passed 且 diagnostics 为空，不增加编译器规则、验证脚本或类型预算。

@@ -54,10 +54,8 @@ jobs:
 
       - name: Build native library and inspect ABI exports
         run: |
-          cargo build --release --locked
+          sh build.sh
           nm -D --defined-only target/release/libcalcit_regex.so
-
-      - run: mkdir -p dylibs/ && ls target/release/ && cp -v target/release/*.* dylibs/
 
       - name: Validate Calcit behavior and documentation
         run: |
