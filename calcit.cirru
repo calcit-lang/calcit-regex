@@ -131,7 +131,6 @@
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop pattern
             , &unit
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Dynamic
         're-find $ %{} 'CodeEntry (:doc |)
@@ -140,7 +139,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s pattern
               , 'String
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'String)
             :args $ [] 'String 'P
             :generics $ [] 'P
@@ -150,7 +148,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s pattern
               :: 'List 'String
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {}
             :args $ [] 'String 'P
             :generics $ [] 'P
@@ -161,7 +158,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s pattern
               , 'Number
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Number)
             :args $ [] 'String 'P
             :generics $ [] 'P
@@ -199,7 +195,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s pattern
               , 'Bool
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ [] 'String 'P
             :generics $ [] 'P
@@ -210,7 +205,6 @@
               (:ok handle) handle
               (:err message) (raise message)
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'Dynamic)
             :args $ [] 'String
         're-replace-all $ %{} 'CodeEntry (:doc |)
@@ -219,7 +213,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s pattern next
               , 'String
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {} (:return 'String)
             :args $ [] 'String 'P 'String
             :generics $ [] 'P
@@ -239,7 +232,6 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s pattern
               :: 'List 'String
           :examples $ []
-          :ffi $ {} $ :features (#{} :js-ffi)
           :schema $ :: 'Fn $ {}
             :args $ [] 'String 'P
             :generics $ [] 'P

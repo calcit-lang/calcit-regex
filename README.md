@@ -2,35 +2,29 @@
 
 > Rust library for Calcit runtime.
 
-使用者注意：候选模块 **0.0.27** 配对正式 Calcit **0.30.1**，本库仅运行 native，
+使用者注意：候选模块 **0.0.28** 配对正式 Calcit **0.31.0**，本库仅运行 native，
 没有 npm runtime。需要重启原生进程并使用本机架构的动态库；不承诺 JS/WASM 支持。
-本次 Snapshot、Rust、Cargo 依赖/lock、公开 API 与资源生命周期均不变。
+相对已发布 **0.0.27**，仅清除 8 个 native 函数上遗留的 `:features #{:js-ffi}` 元数据；
+函数实现、类型、测试、四个现有 native FFI contract、Rust、Cargo crate 0.0.17、
+Cargo 依赖/lock、公开 API 与资源生命周期均不变。消费者应同步精确工具链，并使用锁定 Cargo 依赖重新构建动态库。
 版本号不代表已发布，精确正式验收和发布状态以 PR / Release 为准。
 
-This candidate targets formal Calcit 0.30.1. Module 0.0.26 remains the previously
+This candidate targets formal Calcit 0.31.0. Module 0.0.27 remains the previously
 published version until the new tag is released.
 The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
 Strict type checking remains enabled;
 the only remaining open schemas are the host-managed opaque regex resource
 boundary, reported by the compiler's weak-type diagnostics.
 
-本轮迁移清理九处旧 Option/Result 构造写法，保留原资源生命周期、错误和空匹配语义。
-本轮进一步迁移平台 macro 和附带测试/示例中的 Option/Result helper；原断言和 ABI 不变。
 RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问。
-三个原有 opaque resource 类型槽仍保留，废弃调用和 unsafe coercion 均为零。
+三处原有 opaque resource 动态边界仍保留并报告，废弃调用和 unsafe coercion 均为零。
 原质量预算通过后退役；weak-types 只报告类型债务，不替代统计阈值。
 CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
 不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
 
-此前 `0.0.26` 已正式发布；以下源码迁移说明属于既有实现，不是本次重新改写。
-本轮仅更新工具链、CI 和说明，不修改 Snapshot、Rust、Cargo 依赖/lock、公开 API
-或资源生命周期，验收后另发模块 `0.0.27`。此前正式 Calcit 0.29.0 的嵌套 Option
-方法合同与空 Option 泛型推断问题，现已由正式 Calcit 0.29.1 修复。
-当前源码不依赖临时编译器；原有类型合同、断言、资源生命周期和 ABI 不变。
-本轮从既有 alpha.5 配对升级到正式 Calcit 0.30.1；此前 alpha 的验证不能冒充本次
-正式版本验收。本库仅运行 native，无 npm runtime 配对。
-CI 显式读取 deps.cirru 并使用已有 Cargo.lock，新增全部定义检查，保留原 strict、
-公开 API、Rust、动态库及文档测试，原 release 构建同时输出实际 ABI 导出供审阅。
+本轮更新工具链、清理上述遗留元数据并精简说明，不修改 CI 或增加验证脚本。CI 从 deps.cirru 读取正式版本，
+使用已有 Cargo.lock，保留全部定义、strict、公开 API、Rust、动态库及文档测试，
+原 release 构建输出实际 ABI 导出供审阅；验收以本次精确提交的 CI 为准。
 完整 strict 明确要求 passed 且 diagnostics 为空，不增加编译器规则、验证脚本或类型预算。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
