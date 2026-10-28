@@ -14,77 +14,53 @@
           :doc "|Compiled regex constructor with RegexTrait methods attached."
           :code $ quote $ def Regex (impl-traits Regex0 RegexImpl)
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'Regex0 $ %{} 'CodeEntry
           :doc "|Base struct definition for the public Regex type; attach RegexImpl through the Regex constructor."
           :code $ quote $ defstruct Regex (:handle 'Dynamic)
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'RegexImpl $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defimpl RegexImpl RegexTrait
             .matches? $ fn (self text)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String
-                :return 'Bool
+              hint-fn $ Fn regex.core/Regex String $ -> Bool
               re-matches text $ :handle self
             .find $ fn (self text)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String
-                :return $ :: 'Option 'String
+              hint-fn $ Fn regex.core/Regex String $ -> (Option String)
               re-find-option text $ :handle self
             .find-index $ fn (self text)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String
-                :return $ :: 'Option 'Number
+              hint-fn $ Fn regex.core/Regex String $ -> (Option Number)
               re-find-index-option text $ :handle self
             .find-all $ fn (self text)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String
-                :return $ :: 'List 'String
+              hint-fn $ Fn regex.core/Regex String $ -> (List String)
               re-find-all text $ :handle self
             .split $ fn (self text)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String
-                :return $ :: 'List 'String
+              hint-fn $ Fn regex.core/Regex String $ -> (List String)
               re-split text $ :handle self
             .replace-all $ fn (self text replacement)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex 'String 'String
-                :return 'String
+              hint-fn $ Fn regex.core/Regex String String $ -> String
               re-replace-all text (:handle self) replacement
             .source $ fn (self)
-              hint-fn $ {}
-                :args $ [] 'regex.core/Regex
-                :return 'String
+              hint-fn $ Fn regex.core/Regex $ -> String
               re-source $ :handle self
           :examples $ []
-          :schema $ :: 'Impl
+          :schema $ quote Impl
         'RegexTrait $ %{} 'CodeEntry
           :doc "|Typed methods for reusable compiled regex patterns."
           :code $ quote $ deftrait RegexTrait
-            .matches? $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String
-              :return 'Bool
-            .find $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String
-              :return $ :: 'Option 'String
-            .find-index $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String
-              :return $ :: 'Option 'Number
-            .find-all $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String
-              :return $ :: 'List 'String
-            .split $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String
-              :return $ :: 'List 'String
-            .replace-all $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex 'String 'String
-              :return 'String
-            .source $ :: 'Fn $ {}
-              :args $ [] 'regex.core/Regex
-              :return 'String
+            .matches? $ quote $ Fn regex.core/Regex String (-> Bool)
+            .find $ quote $ Fn regex.core/Regex String
+              -> $ Option String
+            .find-index $ quote $ Fn regex.core/Regex String
+              -> $ Option Number
+            .find-all $ quote $ Fn regex.core/Regex String
+              -> $ List String
+            .split $ quote $ Fn regex.core/Regex String
+              -> $ List String
+            .replace-all $ quote $ Fn regex.core/Regex String String (-> String)
+            .source $ quote $ Fn regex.core/Regex (-> String)
           :examples $ []
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'compile $ %{} 'CodeEntry
           :doc "|Compile a regex pattern into Result<Regex, String> without raising on invalid syntax."
           :code $ quote $ defn compile (pattern)
@@ -97,10 +73,9 @@
           :examples $ [] $ quote
             assert |invalid-pattern-should-return-err $ .err? $ compile |[
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'String
-            :features $ #{} :js-ffi
-            :return $ :: 'Result 'regex.core/Regex 'String
+          :schema $ quote $ Fn String
+            -> $ Result regex.core/Regex String
+            :features :js-ffi
           :tests $ [] $ %{} 'TestEntry (:name |compiled-methods-preserve-option-semantics)
             :code $ quote $ do
               assert |invalid-pattern-should-return-err $ .err? $ compile |[
@@ -121,46 +96,39 @@
               (:ok value) value
               (:err message) (raise message)
           :examples $ [] $ quote
-            [] $ quote $ let
+            let
                 pattern $ compile! |\d+
-              assert |compiled-pattern-finds-digit $ &= (%some |4) (.find pattern |a4)
-          :schema $ :: 'Fn $ {} (:return 'regex.core/Regex)
-            :args $ [] 'String
+              assert |compiled-pattern-finds-digit $ &= (Option :some |4) (.find pattern |a4)
+          :schema $ quote $ Fn String (-> regex.core/Regex)
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-drop (pattern)
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop pattern
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
+          :schema $ quote $ Fn Dynamic (-> Unit)
         're-find $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s pattern
               , 'String
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ [] 'String 'P
-            :generics $ [] 'P
+          :schema $ quote $ Fn String P (-> String) (:generics P)
         're-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-all (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s pattern
               :: 'List 'String
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'String 'P
-            :generics $ [] 'P
-            :return $ :: 'List 'String
+          :schema $ quote $ Fn String P
+            -> $ List String
+            :generics P
         're-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-index (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s pattern
               , 'Number
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Number)
-            :args $ [] 'String 'P
-            :generics $ [] 'P
+          :schema $ quote $ Fn String P (-> Number) (:generics P)
         're-find-index-option $ %{} 'CodeEntry
           :doc "|Find the first match index as Option<Number> instead of using -1 as a sentinel."
           :code $ quote $ defn re-find-index-option (text pattern)
@@ -170,11 +138,10 @@
                 Option :some $ decode-map-as found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'String 'P
-            :features $ #{} :js-ffi
-            :generics $ [] 'P
-            :return $ :: 'Option 'Number
+          :schema $ quote $ Fn String P
+            -> $ Option Number
+            :generics P
+            :features :js-ffi
         're-find-option $ %{} 'CodeEntry
           :doc "|Find the first match as Option<String>, preserving an empty match as Some empty-string."
           :code $ quote $ defn re-find-option (text pattern)
@@ -184,20 +151,17 @@
                 Option :some $ decode-map-as found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'String 'P
-            :features $ #{} :js-ffi
-            :generics $ [] 'P
-            :return $ :: 'Option 'String
+          :schema $ quote $ Fn String P
+            -> $ Option String
+            :generics P
+            :features :js-ffi
         're-matches $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-matches (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s pattern
               , 'Bool
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ [] 'String 'P
-            :generics $ [] 'P
+          :schema $ quote $ Fn String P (-> Bool) (:generics P)
         're-pattern $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-pattern (pattern)
             match
@@ -205,17 +169,14 @@
               (:ok handle) handle
               (:err message) (raise message)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'String
+          :schema $ quote $ Fn String (-> Dynamic)
         're-replace-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-replace-all (s pattern next)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s pattern next
               , 'String
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ [] 'String 'P 'String
-            :generics $ [] 'P
+          :schema $ quote $ Fn String P String (-> String) (:generics P)
         're-source $ %{} 'CodeEntry
           :doc "|Read the source string from a compiled regex pattern."
           :code $ quote $ defn re-source (pattern)
@@ -224,18 +185,16 @@
               , 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_source) (:transport :edn-buffer-v1)
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ [] 'Dynamic
+          :schema $ quote $ Fn Dynamic (-> String)
         're-split $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-split (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s pattern
               :: 'List 'String
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'String 'P
-            :generics $ [] 'P
-            :return $ :: 'List 'String
+          :schema $ quote $ Fn String P
+            -> $ List String
+            :generics P
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns regex.core
           :require
@@ -247,9 +206,7 @@
           :code $ quote $ defn check-equal (expected actual)
             assert |values-should-equal $ &= expected actual
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'T 'T
-            :generics $ [] 'T
+          :schema $ quote $ Fn T T (-> Unit) (:generics T)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (println "|%%%% test for regex") (println "|Test regular expression")
             check-equal true $ re-matches |2 |\d
@@ -288,8 +245,7 @@
               println |Compiled-regex-methods-passed
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
+          :schema $ quote $ Fn (-> Unit)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns regex.test
           :require
@@ -302,24 +258,21 @@
             match (&get-os) (:macos |.dylib) (:windows |.dll) (_ |.so)
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
-          :schema $ :: 'Macro $ {}
-            :capabilities $ #{} :platform-read
-            :expansion $ :: 'Expr 'String
-            :required $ []
+          :schema $ quote $ Macro
+            -> $ Expr String
+            :capabilities :platform-read
         'get-dylib-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-dylib-path (p)
             str (or-current-path calcit-dirname) p $ get-dylib-ext
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ [] 'String
+          :schema $ quote $ Fn String (-> String)
         'or-current-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn or-current-path (p)
             if (blank? p) |. p
           :examples $ []
           :ffi $ {} $ :features (#{} :js-ffi)
-          :schema $ :: 'Fn $ {} (:return 'String)
-            :args $ [] 'String
+          :schema $ quote $ Fn String (-> String)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns regex.util
           :require $ regex.$meta :refer $ calcit-dirname calcit-filename

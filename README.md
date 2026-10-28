@@ -2,6 +2,18 @@
 
 > Rust library for Calcit runtime.
 
+### 0.0.29 候选：Calcit 0.32.0
+
+使用者影响：本候选要求 Calcit 0.32.0，类型标注改用紧凑语法；旧 CLI 消费者应保留原 tag。本库仅支持 native，没有 npm runtime；下游需重启原生进程并重新构建目标架构 dylib。模块 API、正则语义、opaque resource 生命周期与 native ABI 不变，Cargo crate 0.0.17 及依赖保持。
+
+通过官方 `edit format` 更新标注，22 个定义的语义 schema 保持，只有 RegexTrait/RegexImpl 的方法类型表示变化。原动态资源边界如实保留，既有 strict、公开 API、Rust、dylib 与文档门禁不放宽。模块 0.0.29 须待精确 CI 与评审通过后发 tag，候选不是已发布版本。
+
+同时修复 `compile!` 附带示例的旧迁移遗漏：移除误加的 List/quote 包装，将已删除的 `%some` 改为 `Option :some`，让原匹配断言真正执行。业务函数和预期结果不变；隔离副本中的错误预期已确认会被该断言拒绝，不再把构造代码数据当作运行验收。
+
+CLI 兼容性注意：0.32.0 的 native `identical?` 对容器改为身份比较；消费者比较内容应使用 `=`。本模块没有该调用，不因此机械改写业务逻辑。参见[精确版本迁移说明](https://github.com/calcit-lang/calcit/blob/0.32.0/docs/run/upgrade.md)。
+
+以下为先前版本记录。
+
 使用者注意：候选模块 **0.0.28** 配对正式 Calcit **0.31.0**，本库仅运行 native，
 没有 npm runtime。需要重启原生进程并使用本机架构的动态库；不承诺 JS/WASM 支持。
 相对已发布 **0.0.27**，仅清除 8 个 native 函数上遗留的 `:features #{:js-ffi}` 元数据；
