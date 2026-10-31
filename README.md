@@ -2,44 +2,22 @@
 
 > Rust library for Calcit runtime.
 
-### 0.0.29 候选：Calcit 0.32.0
+### 0.0.30 候选：使用者影响
 
-使用者影响：本候选要求 Calcit 0.32.0，类型标注改用紧凑语法；旧 CLI 消费者应保留原 tag。本库仅支持 native，没有 npm runtime；下游需重启原生进程并重新构建目标架构 dylib。模块 API、正则语义、opaque resource 生命周期与 native ABI 不变，Cargo crate 0.0.17 及依赖保持。
+本候选要求正式 Calcit **0.32.1**；仍使用 0.32.0 的消费者可保留正式 0.0.29。仅支持 native，没有 npm runtime 或 JS/WASM 后端；下游须重启原生进程并重新构建目标架构 dylib。候选版本不代表已有正式 tag，本 PR 不发版或部署。
 
-通过官方 `edit format` 更新标注，22 个定义的语义 schema 保持，只有 RegexTrait/RegexImpl 的方法类型表示变化。原动态资源边界如实保留，既有 strict、公开 API、Rust、dylib 与文档门禁不放宽。模块 0.0.29 须待精确 CI 与评审通过后发 tag，候选不是已发布版本。
+本次只对齐工具链与候选模块版本，Snapshot、22 个定义的 schema/实现/测试、正则语义、opaque resource 生命周期和 C-safe ABI 不变。Cargo crate 仍为 0.0.17，Cargo 依赖及 lock 不变；共享 `calcit_native_ffi` 继续使用正式 0.1.3。既有 strict、公开 API、Rust、dylib、示例与文档门禁全部保留，不新增验证脚本或预算。
 
-同时修复 `compile!` 附带示例的旧迁移遗漏：移除误加的 List/quote 包装，将已删除的 `%some` 改为 `Option :some`，让原匹配断言真正执行。业务函数和预期结果不变；隔离副本中的错误预期已确认会被该断言拒绝，不再把构造代码数据当作运行验收。
+RegexImpl 保持与 RegexTrait 一致的具体函数合同和名义字段访问；三个原有 opaque resource 动态边界继续报告，不把门禁通过称为零类型债务。`Regex` 构造器是 `StructDef`，不是 `Impl`。`compile!` 的原 Option 匹配断言保持可执行。
 
-CLI 兼容性注意：0.32.0 的 native `identical?` 对容器改为身份比较；消费者比较内容应使用 `=`。本模块没有该调用，不因此机械改写业务逻辑。参见[精确版本迁移说明](https://github.com/calcit-lang/calcit/blob/0.32.0/docs/run/upgrade.md)。
+Actions 使用精确正式 tag；维护者已接受 tag 可移动风险。复用 setup-rust-toolchain，替代浮动 stable action 和主版本缓存 action，不新增 pin checker。canonical 门禁使用 quiet 输出，失败条件保持。
 
-以下为先前版本记录。
+开发时运行 `caps --strict --ci`、`caps verify --toolchain`、`sh build.sh`，再执行原完整 CI 中的 Rust、类型、示例和 native 回归。build.sh 按 Cargo.lock 构建，失败停止且不清空现有 dylibs；本库没有前端，不添加 COS/CDN。Linux 验证不构成全部平台承诺。
 
-使用者注意：候选模块 **0.0.28** 配对正式 Calcit **0.31.0**，本库仅运行 native，
-没有 npm runtime。需要重启原生进程并使用本机架构的动态库；不承诺 JS/WASM 支持。
-相对已发布 **0.0.27**，仅清除 8 个 native 函数上遗留的 `:features #{:js-ffi}` 元数据；
-函数实现、类型、测试、四个现有 native FFI contract、Rust、Cargo crate 0.0.17、
-Cargo 依赖/lock、公开 API 与资源生命周期均不变。消费者应同步精确工具链，并使用锁定 Cargo 依赖重新构建动态库。
-版本号不代表已发布，精确正式验收和发布状态以 PR / Release 为准。
-
-This candidate targets formal Calcit 0.31.0. Module 0.0.27 remains the previously
-published version until the new tag is released.
-The `Regex` constructor is declared `StructDef`, matching `impl-traits`, not `Impl`.
-Strict type checking remains enabled;
-the only remaining open schemas are the host-managed opaque regex resource
-boundary, reported by the compiler's weak-type diagnostics.
-
-RegexImpl 使用与 RegexTrait 一致的具体函数合同和名义字段访问。
-三处原有 opaque resource 动态边界仍保留并报告，废弃调用和 unsafe coercion 均为零。
-原质量预算通过后退役；weak-types 只报告类型债务，不替代统计阈值。
-CI 保留严格入口、全部公开 API、Rust 与原生动态库测试及文档检查；
-不新增验证框架。此库没有前端部署，不添加 COS/CDN。Action 使用正式标签，标签可移动的供应链风险仍存在。
-
-本轮更新工具链、清理上述遗留元数据并精简说明，不增加验证脚本。消费者使用 `sh build.sh`，
-该入口执行 `cargo build --release --locked`，失败立即停止且不清空现有 dylibs；CI 复用同一入口，
-保留 ABI 导出检查并移除重复复制步骤。CI 从 deps.cirru 读取正式版本，
-使用已有 Cargo.lock，保留全部定义、strict、公开 API、Rust、动态库及文档测试，
-原 release 构建输出实际 ABI 导出供审阅；验收以本次精确提交的 CI 为准。
-完整 strict 明确要求 passed 且 diagnostics 为空，不增加编译器规则、验证脚本或类型预算。
+Current candidate module 0.0.30 pairs with Calcit 0.32.1. Rebuild the native library
+for the target architecture. The Snapshot, regex behavior, resource ownership and
+C-safe ABI remain unchanged; Cargo crate metadata stays at 0.0.17. No npm runtime,
+JS/WASM backend, frontend deployment or release is introduced by this PR.
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 

@@ -31,7 +31,7 @@ jobs:
           caps --strict --ci
           caps verify --toolchain
           calcit calcit.cirru edit format
-          git diff --exit-code -- calcit.cirru
+          git diff --exit-code --quiet -- calcit.cirru
           calcit calcit.cirru --warn-dyn-method --check-only
           calcit calcit.cirru --check-only --all-defs
           calcit calcit.cirru fix --workflow strict --verify --format json | jq -e 'if .data.workflow.status == "passed" and .diagnostics == [] then true else ., false end'
@@ -39,12 +39,11 @@ jobs:
           calcit calcit.cirru analyze weak-types --only coverage --summary-only --format edn
           calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format edn
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions-rust-lang/setup-rust-toolchain@v2.0.0
         with:
           toolchain: stable
-          components: clippy
-
-      - uses: Swatinem/rust-cache@v2
+          components: clippy,rustfmt
+          cache: false
 
       - run: cargo fmt --check
 
