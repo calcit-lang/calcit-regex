@@ -12,7 +12,7 @@
       :defs $ {}
         'Pattern $ %{} 'CodeEntry
           :doc "|A regex source string or an owned compiled Regex. Native resource handles stay inside Regex rather than flowing through public pattern arguments."
-          :code $ quote $ defunion Pattern String regex.core/Regex0
+          :code $ quote $ defunion Pattern String regex.core/Regex
           :examples $ []
           :schema $ quote UnionDef
           :tests $ [] $ %{} 'TestEntry (:name |source-and-compiled-patterns-preserve-results)
@@ -126,98 +126,99 @@
         'pattern-handle $ %{} 'CodeEntry
           :doc "|Internal native-transport projection: source String or the existing opaque resource lease, validated by the Rust adapter. Do not expose or persist this Dynamic boundary."
           :code $ quote $ defn pattern-handle (pattern)
-            hint-fn $ Fn regex.core/Pattern $ -> Dynamic
             match pattern
               (String source) source
               (Regex compiled) (:handle compiled)
           :examples $ []
+          :schema $ quote $ Fn regex.core/Pattern (-> Dynamic)
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-drop (pattern)
-            hint-fn $ Fn regex.core/Pattern $ -> Unit
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop $ pattern-handle pattern
             , &unit
           :examples $ []
+          :schema $ quote $ Fn regex.core/Pattern (-> Unit)
         're-find $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find (s pattern)
-            hint-fn $ Fn String regex.core/Pattern $ -> String
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s $ pattern-handle pattern
               , 'String
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern (-> String)
         're-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-all (s pattern)
-            hint-fn $ Fn String regex.core/Pattern $ -> (List String)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s $ pattern-handle pattern
               quote $ List String
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern
+            -> $ List String
         're-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-index (s pattern)
-            hint-fn $ Fn String regex.core/Pattern $ -> Number
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s $ pattern-handle pattern
               , 'Number
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern (-> Number)
         're-find-index-option $ %{} 'CodeEntry
           :doc "|Find the first match index as Option<Number> instead of using -1 as a sentinel."
           :code $ quote $ defn re-find-index-option (text pattern)
-            hint-fn $ Fn String regex.core/Pattern
-              -> $ Option Number
-              :features :js-ffi
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text $ pattern-handle pattern
               if (nil? found) (Option :none)
                 Option :some $ decode-map-as found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
+          :schema $ quote $ Fn String regex.core/Pattern
+            -> $ Option Number
+            :features :js-ffi
         're-find-option $ %{} 'CodeEntry
           :doc "|Find the first match as Option<String>, preserving an empty match as Some empty-string."
           :code $ quote $ defn re-find-option (text pattern)
-            hint-fn $ Fn String regex.core/Pattern
-              -> $ Option String
-              :features :js-ffi
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text $ pattern-handle pattern
               if (nil? found) (Option :none)
                 Option :some $ decode-map-as found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
+          :schema $ quote $ Fn String regex.core/Pattern
+            -> $ Option String
+            :features :js-ffi
         're-matches $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-matches (s pattern)
-            hint-fn $ Fn String regex.core/Pattern $ -> Bool
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s $ pattern-handle pattern
               , 'Bool
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern (-> Bool)
         're-pattern $ %{} 'CodeEntry
           :doc "|Compile a source string into the public Regex wrapper. Invalid syntax still raises; automatic lease ownership and re-drop compatibility behavior are preserved."
-          :code $ quote $ defn re-pattern (pattern)
-            hint-fn $ Fn String $ -> regex.core/Regex
-            compile! pattern
+          :code $ quote $ defn re-pattern (pattern) (compile! pattern)
           :examples $ []
+          :schema $ quote $ Fn String (-> regex.core/Regex)
         're-replace-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-replace-all (s pattern next)
-            hint-fn $ Fn String regex.core/Pattern String $ -> String
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s (pattern-handle pattern) next
               , 'String
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern String (-> String)
         're-source $ %{} 'CodeEntry
           :doc "|Read the source string from a String or compiled Regex pattern."
           :code $ quote $ defn re-source (pattern)
-            hint-fn $ Fn regex.core/Pattern $ -> String
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_source $ pattern-handle pattern
               , 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_source) (:transport :edn-buffer-v1)
+          :schema $ quote $ Fn regex.core/Pattern (-> String)
         're-split $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-split (s pattern)
-            hint-fn $ Fn String regex.core/Pattern $ -> (List String)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s $ pattern-handle pattern
               quote $ List String
           :examples $ []
+          :schema $ quote $ Fn String regex.core/Pattern
+            -> $ List String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns regex.core
           :require

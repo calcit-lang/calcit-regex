@@ -6,13 +6,13 @@
 
 候选拟配对正式 Calcit **0.34.0**，用 `Pattern` union 将 `re-*` 的 pattern 收窄为字符串或公开 `Regex` 构造值。`re-pattern` 拟返回同一 `Regex` 封装，调用其结果做匹配的写法保持；依赖旧裸原生 token 形状的调用方需要迁移，不再直接传 token 或未收窄的 Dynamic。这是非 patch 类型/API 变更，尚不可作为已发布依赖使用。
 
-**当前被上游阻断，未验收完成。** 官方 0.34.0 的 union 别名模式解析失败（[calcit#2529](https://github.com/calcit-lang/calcit/issues/2529)）；metadata schema writer 对命名 union 的函数引用也失败（[calcit#2528](https://github.com/calcit-lang/calcit/issues/2528)）。草稿使用受支持的内联 `hint-fn` 声明进行验证，完整类型检查仍未通过，新增 Calcit 运行回归尚未执行。不能把格式写入成功、Rust 测试通过或弱类型数字当作迁移成功。
+**当前等待正式编译器修复，未验收完成。** 官方 0.34.0 的 union 别名模式解析失败（[calcit#2529](https://github.com/calcit-lang/calcit/issues/2529)）。类型合同保存在 metadata schema；此前编辑失败来自 JSON AST 额外 quote 的输入错误，已更正，原 #2528 误报已关闭。未发布的核心修复候选可检查全部 26 个定义并执行原生回归，但这些结果不能冒充官方版本验收或发布。
 
-原有 native Rust 实现、Cargo crate 0.0.17、依赖与 lock、opaque lease 生命周期及 C-safe ABI 保持。原 5 项 Rust 测试、fmt、all-targets Clippy 与锁定 release 构建已通过；完整 strict、公开 API、全部原生行为/示例/文档须在阻塞解除后继续验收，门禁没有放宽。`Regex` 内部的原生 handle 和传输投影仍是明确的 Dynamic 边界，不宣称类型债务清零。
+原有 native Rust 实现、Cargo crate 0.0.17、依赖与 lock、opaque lease 生命周期及 C-safe ABI 保持。原 5 项 Rust 测试、fmt、all-targets Clippy 与锁定 release 构建已通过。未发布的核心候选也通过完整 strict、公开 API、两项附带测试、原生 FFI 入口、示例和文档；正式工具链验收仍待完成，门禁没有放宽。`Regex` 内部的原生 handle 和传输投影仍是明确的 Dynamic 边界，不宣称类型债务清零。
 
 仅支持 native，没有 npm runtime、JS/WASM 或前端；下游升级后需重建目标架构 dylib。此草稿不合并、不发布 tag/crates.io，也不部署。
 
-Draft 0.1.0 targets official Calcit 0.34.0 with a closed source-string/compiled-Regex Pattern union. It changes re-pattern from a raw token to the existing Regex wrapper. This non-patch candidate is blocked by upstream alias-pattern and schema-writer issues. Full Calcit checks and runtime acceptance are incomplete; no gate is relaxed and no release is available. Rust sources, dependencies, lock and native resource ownership remain unchanged.
+Draft 0.1.0 targets official Calcit 0.34.0 with a closed source-string/compiled-Regex Pattern union. It changes re-pattern from a raw token to the existing Regex wrapper. This non-patch candidate awaits the upstream alias-pattern fix in an official release. Metadata schemas are retained; the earlier schema-writer report was incorrect JSON transport input and has been closed. Unreleased-compiler checks do not establish official acceptance; no gate is relaxed or release available. Rust sources, dependencies, lock and native resource ownership remain unchanged.
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
