@@ -2,22 +2,17 @@
 
 > Rust library for Calcit runtime.
 
-### 0.0.30 候选：使用者影响
+### 0.1.0 迁移草稿：使用者影响
 
-本候选要求正式 Calcit **0.32.1**；仍使用 0.32.0 的消费者可保留正式 0.0.29。仅支持 native，没有 npm runtime 或 JS/WASM 后端；下游须重启原生进程并重新构建目标架构 dylib。候选版本不代表已有正式 tag，本 PR 不发版或部署。
+候选拟配对正式 Calcit **0.34.0**，用 `Pattern` union 将 `re-*` 的 pattern 收窄为字符串或公开 `Regex` 构造值。`re-pattern` 拟返回同一 `Regex` 封装，调用其结果做匹配的写法保持；依赖旧裸原生 token 形状的调用方需要迁移，不再直接传 token 或未收窄的 Dynamic。这是非 patch 类型/API 变更，尚不可作为已发布依赖使用。
 
-本次只对齐工具链与候选模块版本，Snapshot、22 个定义的 schema/实现/测试、正则语义、opaque resource 生命周期和 C-safe ABI 不变。Cargo crate 仍为 0.0.17，Cargo 依赖及 lock 不变；共享 `calcit_native_ffi` 继续使用正式 0.1.3。既有 strict、公开 API、Rust、dylib、示例与文档门禁全部保留，不新增验证脚本或预算。
+**当前被上游阻断，未验收完成。** 官方 0.34.0 的 union 别名模式解析失败（[calcit#2529](https://github.com/calcit-lang/calcit/issues/2529)）；metadata schema writer 对命名 union 的函数引用也失败（[calcit#2528](https://github.com/calcit-lang/calcit/issues/2528)）。草稿使用受支持的内联 `hint-fn` 声明进行验证，完整类型检查仍未通过，新增 Calcit 运行回归尚未执行。不能把格式写入成功、Rust 测试通过或弱类型数字当作迁移成功。
 
-RegexImpl 保持与 RegexTrait 一致的具体函数合同和名义字段访问；三个原有 opaque resource 动态边界继续报告，不把门禁通过称为零类型债务。`Regex` 构造器是 `StructDef`，不是 `Impl`。`compile!` 的原 Option 匹配断言保持可执行。
+原有 native Rust 实现、Cargo crate 0.0.17、依赖与 lock、opaque lease 生命周期及 C-safe ABI 保持。原 5 项 Rust 测试、fmt、all-targets Clippy 与锁定 release 构建已通过；完整 strict、公开 API、全部原生行为/示例/文档须在阻塞解除后继续验收，门禁没有放宽。`Regex` 内部的原生 handle 和传输投影仍是明确的 Dynamic 边界，不宣称类型债务清零。
 
-Actions 使用精确正式 tag；维护者已接受 tag 可移动风险。复用 setup-rust-toolchain，替代浮动 stable action 和主版本缓存 action，不新增 pin checker。canonical 门禁使用 quiet 输出，失败条件保持。
+仅支持 native，没有 npm runtime、JS/WASM 或前端；下游升级后需重建目标架构 dylib。此草稿不合并、不发布 tag/crates.io，也不部署。
 
-开发时运行 `caps --strict --ci`、`caps verify --toolchain`、`sh build.sh`，再执行原完整 CI 中的 Rust、类型、示例和 native 回归。build.sh 按 Cargo.lock 构建，失败停止且不清空现有 dylibs；本库没有前端，不添加 COS/CDN。Linux 验证不构成全部平台承诺。
-
-Current candidate module 0.0.30 pairs with Calcit 0.32.1. Rebuild the native library
-for the target architecture. The Snapshot, regex behavior, resource ownership and
-C-safe ABI remain unchanged; Cargo crate metadata stays at 0.0.17. No npm runtime,
-JS/WASM backend, frontend deployment or release is introduced by this PR.
+Draft 0.1.0 targets official Calcit 0.34.0 with a closed source-string/compiled-Regex Pattern union. It changes re-pattern from a raw token to the existing Regex wrapper. This non-patch candidate is blocked by upstream alias-pattern and schema-writer issues. Full Calcit checks and runtime acceptance are incomplete; no gate is relaxed and no release is available. Rust sources, dependencies, lock and native resource ownership remain unchanged.
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
