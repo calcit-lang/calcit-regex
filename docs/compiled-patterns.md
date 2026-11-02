@@ -38,7 +38,7 @@ move to `regex.core/Regex`. `Regex0` is only the internal binding that holds the
 base struct definition; `Regex` is the public nominal type with attached
 methods.
 
-For dynamic one-shot patterns, prefer `re-find-option` and `re-find-index-option` when absence is part of normal control flow. Legacy helpers remain useful for compatibility, but new typed business code should keep missing values explicit.
+For one-shot Pattern values, prefer `re-find-option` and `re-find-index-option` when absence is part of normal control flow. Legacy helpers remain useful for compatibility, but new typed business code should keep missing values explicit.
 
 ## Native resource lifetime
 
@@ -60,17 +60,15 @@ Maintainers can inspect the deterministic contract without loading the dylib:
 calcit calcit.cirru ffi export --format json --ns regex.core
 ```
 
-Interface IR v3 reports the resource-backed `Regex` field and the one-shot
-string-or-compiled inputs as explicit unsupported diagnostics for strict
-bindgen. They must not be silently generated as untyped boundaries. The nominal-name
-lookup issue [#634](https://github.com/calcit-lang/calcit/issues/634) is resolved:
-on 0.30.1-alpha.5, the exporter resolves the public `Regex` name and reports its
-unsupported Dynamic resource field, not a missing declaration. These diagnostics
-do not mean strict bindgen can generate the handwritten resource adapter.
+Interface IR v3 rejects the intentionally Dynamic resource field of the resolved public
+Regex struct. On official 0.34.1 it also reports a declared Pattern union as a missing local
+declaration; [#2536](https://github.com/calcit-lang/calcit/issues/2536) tracks that diagnostic.
+Neither outcome proves that strict bindgen can generate the handwritten resource adapter.
+Keep the resource boundary explicit rather than forging a generator-safe field type.
 
 `compile` 与 `re-source` 的公开 FFI 元数据只记录稳定的 native backend、base
 symbol、sync invoke 与 `edn-buffer-v1` transport。opaque token registry、generation
 check、lease 与最终引用 release 由手写 adapter 和运行时内部管理，调用方不声明
-ownership/borrow 状态。Interface IR v3 会把资源封装的 `Regex` 字段以及 one-shot
-的字符串或 compiled 联合输入显示为严格 bindgen 的显式 unsupported diagnostic，
+ownership/borrow 状态。Interface IR v3 会拒绝资源封装 `Regex` 的 Dynamic 字段；正式 0.34.1 对已声明的 `Pattern`
+union 仍误报缺失声明（#2536），
 不能静默生成无类型边界。

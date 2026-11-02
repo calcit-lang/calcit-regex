@@ -2,22 +2,35 @@
 
 > Rust library for Calcit runtime.
 
-### 0.0.30 候选：使用者影响
+### 0.1.0 候选：使用者影响
 
-本候选要求正式 Calcit **0.32.1**；仍使用 0.32.0 的消费者可保留正式 0.0.29。仅支持 native，没有 npm runtime 或 JS/WASM 后端；下游须重启原生进程并重新构建目标架构 dylib。候选版本不代表已有正式 tag，本 PR 不发版或部署。
+候选配对正式 Calcit **0.34.1**。十个 one-shot pattern 参数从无约束泛型 `P` 或 `Dynamic`
+收紧为 `Pattern = String | Regex`；传字符串和完整 `Regex` 封装的常规匹配写法保持。
+`re-pattern` 现在返回公开 `Regex`，依赖旧裸原生 token 形状、把 `:handle` 传入 API，
+或传未收窄 Dynamic 的调用方需要迁移：传整个 Regex，或调用其 typed methods。
+这是非 patch 类型/API 变更；候选尚未发布，正式依赖以实际 Git tag 为准。
 
-本次只对齐工具链与候选模块版本，Snapshot、22 个定义的 schema/实现/测试、正则语义、opaque resource 生命周期和 C-safe ABI 不变。Cargo crate 仍为 0.0.17，Cargo 依赖及 lock 不变；共享 `calcit_native_ffi` 继续使用正式 0.1.3。既有 strict、公开 API、Rust、dylib、示例与文档门禁全部保留，不新增验证脚本或预算。
+原 Rust 实现、Cargo crate 0.0.17、依赖/lock、opaque lease 生命周期和 C-safe ABI 保持。
+原生 handle 字段和内部传输投影仍是明确的 Dynamic 边界。仅支持 native，没有 npm runtime、
+JS/WASM 或前端部署；下游需重建目标架构 dylib，不将本机验收当作全平台保证。
 
-RegexImpl 保持与 RegexTrait 一致的具体函数合同和名义字段访问；三个原有 opaque resource 动态边界继续报告，不把门禁通过称为零类型债务。`Regex` 构造器是 `StructDef`，不是 `Impl`。`compile!` 的原 Option 匹配断言保持可执行。
+正式0.34.1已通过全部26个定义、完整strict和公开API检查、原native入口、5个Rust测试、
+fmt、all-targets Clippy、locked release构建与ABI导出检查。原compile附加测试保持，
+新增一项Pattern测试覆盖字符串/编译值一致性及空匹配、缺失、re-drop兼容行为，合计2项通过。
+隔离负例 `re-find |a1 7` 在进入FFI前即被原静态门禁拒绝，不增加验证脚本或放宽预算。
 
-Actions 使用精确正式 tag；维护者已接受 tag 可移动风险。复用 setup-rust-toolchain，替代浮动 stable action 和主版本缓存 action，不新增 pin checker。canonical 门禁使用 quiet 输出，失败条件保持。
+手写 native adapter 可正常使用。FFI Interface IR v3 对 Regex 的 Dynamic resource 字段
+仍明确拒绝生成；对已声明 Pattern union 的导出还会误报缺失声明，见
+[calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)。这不代表支持自动生成绑定，
+也不通过伪造资源类型隐藏该边界。本候选不发布 crates.io 或 npm，不部署应用。
 
-开发时运行 `caps --strict --ci`、`caps verify --toolchain`、`sh build.sh`，再执行原完整 CI 中的 Rust、类型、示例和 native 回归。build.sh 按 Cargo.lock 构建，失败停止且不清空现有 dylibs；本库没有前端，不添加 COS/CDN。Linux 验证不构成全部平台承诺。
-
-Current candidate module 0.0.30 pairs with Calcit 0.32.1. Rebuild the native library
-for the target architecture. The Snapshot, regex behavior, resource ownership and
-C-safe ABI remain unchanged; Cargo crate metadata stays at 0.0.17. No npm runtime,
-JS/WASM backend, frontend deployment or release is introduced by this PR.
+The 0.1.0 candidate requires official Calcit 0.34.1. Ten one-shot pattern inputs now accept
+only a source String or the public Regex wrapper, replacing unconstrained P/Dynamic inputs.
+re-pattern returns that wrapper; callers forwarding raw resource tokens must pass the whole
+Regex or use its typed methods. This is a non-patch API change, not an available release yet.
+Rust code, dependency locks, the C-safe ABI and lease ownership are unchanged. Native tests and
+strict checks pass; generated FFI bindings remain unsupported, with the named-union diagnostic
+tracked in #2536. There is no npm, JS/WASM or deployment claim.
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
@@ -110,8 +123,8 @@ calcit calcit.cirru ffi export --format json --ns regex.core
 
 该命令只读导出 Interface IR v3 的稳定调用边界：backend、symbol、invoke 与
 transport。资源 registry、generation check 与最终引用自动 release 由模块和运行时
-adapter 内部管理，不要求 Calcit 调用方声明 ownership/borrow 元数据；`Regex` 和
-动态 one-shot 输入继续作为暂不可生成的显式 diagnostic。
+adapter 内部管理，不要求 Calcit 调用方声明 ownership/borrow 元数据；`Regex` 的开放资源字段和
+`Pattern` 联合输入继续保留不可生成的显式 diagnostic。
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
