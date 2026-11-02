@@ -69,6 +69,6 @@ Keep the resource boundary explicit rather than forging a generator-safe field t
 `compile` 与 `re-source` 的公开 FFI 元数据只记录稳定的 native backend、base
 symbol、sync invoke 与 `edn-buffer-v1` transport。opaque token registry、generation
 check、lease 与最终引用 release 由手写 adapter 和运行时内部管理，调用方不声明
-ownership/borrow 状态。Interface IR v3 会拒绝资源封装 `Regex` 的 Dynamic 字段；正式0.34.1对已声明的 `Pattern`
-union仍误报缺失声明（#2536），
+ownership/borrow 状态。Interface IR v3 会拒绝资源封装 `Regex` 的 Dynamic 字段；正式 0.34.1 对已声明的 `Pattern`
+union 仍误报缺失声明（#2536），
 不能静默生成无类型边界。

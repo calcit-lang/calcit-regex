@@ -11,7 +11,7 @@
 这是非 patch 类型/API 变更；候选尚未发布，正式依赖以实际 Git tag 为准。
 
 原 Rust 实现、Cargo crate 0.0.17、依赖/lock、opaque lease 生命周期和 C-safe ABI 保持。
-原生 handle 字段和内部传输投影仍是明确 Dynamic 边界。仅支持 native，没有 npm runtime、
+原生 handle 字段和内部传输投影仍是明确的 Dynamic 边界。仅支持 native，没有 npm runtime、
 JS/WASM 或前端部署；下游需重建目标架构 dylib，不将本机验收当作全平台保证。
 
 正式0.34.1已通过全部26个定义、完整strict和公开API检查、原native入口、5个Rust测试、
