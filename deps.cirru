@@ -1,4 +1,4 @@
 
-{} (:calcit-version |0.34.2)
-  :version |0.1.1
+{} (:calcit-version |0.35.1)
+  :version |0.1.2
   :dependencies $ {}

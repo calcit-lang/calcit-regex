@@ -71,17 +71,13 @@
         'RegexTrait $ %{} 'CodeEntry
           :doc "|Typed methods for reusable compiled regex patterns."
           :code $ quote $ deftrait RegexTrait
-            .matches? $ quote $ Fn regex.core/Regex String (-> Bool)
-            .find $ quote $ Fn regex.core/Regex String
-              -> $ Option String
-            .find-index $ quote $ Fn regex.core/Regex String
-              -> $ Option Number
-            .find-all $ quote $ Fn regex.core/Regex String
-              -> $ List String
-            .split $ quote $ Fn regex.core/Regex String
-              -> $ List String
-            .replace-all $ quote $ Fn regex.core/Regex String String (-> String)
-            .source $ quote $ Fn regex.core/Regex (-> String)
+            .matches? $ Fn regex.core/Regex String $ -> Bool
+            .find $ Fn regex.core/Regex String $ -> (Option String)
+            .find-index $ Fn regex.core/Regex String $ -> (Option Number)
+            .find-all $ Fn regex.core/Regex String $ -> (List String)
+            .split $ Fn regex.core/Regex String $ -> (List String)
+            .replace-all $ Fn regex.core/Regex String String $ -> String
+            .source $ Fn regex.core/Regex $ -> String
           :examples $ []
           :schema $ quote Trait
         'compile $ %{} 'CodeEntry
@@ -148,7 +144,7 @@
           :code $ quote $ defn re-find-all (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s $ pattern-handle pattern
-              quote $ List String
+              List String
           :examples $ []
           :schema $ quote $ Fn String regex.core/Pattern
             -> $ List String
@@ -215,7 +211,7 @@
           :code $ quote $ defn re-split (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s $ pattern-handle pattern
-              quote $ List String
+              List String
           :examples $ []
           :schema $ quote $ Fn String regex.core/Pattern
             -> $ List String
