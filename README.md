@@ -2,35 +2,34 @@
 
 > Rust library for Calcit runtime.
 
-### 0.1.0 候选：使用者影响
+### 使用者影响
 
-候选配对正式 Calcit **0.34.1**。十个 one-shot pattern 参数从无约束泛型 `P` 或 `Dynamic`
-收紧为 `Pattern = String | Regex`；传字符串和完整 `Regex` 封装的常规匹配写法保持。
-`re-pattern` 现在返回公开 `Regex`，依赖旧裸原生 token 形状、把 `:handle` 传入 API，
-或传未收窄 Dynamic 的调用方需要迁移：传整个 Regex，或调用其 typed methods。
-这是非 patch 类型/API 变更；候选尚未发布，正式依赖以实际 Git tag 为准。
+0.1.1 要求正式 Calcit **0.34.2**；升级模块前请同步本地和 CI 的 Calcit 版本。
 
-原 Rust 实现、Cargo crate 0.0.17、依赖/lock、opaque lease 生命周期和 C-safe ABI 保持。
-原生 handle 字段和内部传输投影仍是明确的 Dynamic 边界。仅支持 native，没有 npm runtime、
-JS/WASM 或前端部署；下游需重建目标架构 dylib，不将本机验收当作全平台保证。
+已发布的 0.1.0 使用 `Pattern = String | Regex`：十个 one-shot pattern 参数接受
+字符串或完整的 `Regex` 封装。`re-pattern` 返回公开 `Regex`；从更早版本升级、
+依赖旧裸原生 token 形状、把 `:handle` 直接传入 API，或传未收窄 Dynamic 的调用方，
+需要改为传整个 Regex，或调用其 typed methods。
 
-正式0.34.1已通过全部26个定义、完整strict和公开API检查、原native入口、5个Rust测试、
-fmt、all-targets Clippy、locked release构建与ABI导出检查。原compile附加测试保持，
-新增一项Pattern测试覆盖字符串/编译值一致性及空匹配、缺失、re-drop兼容行为，合计2项通过。
-隔离负例 `re-find |a1 7` 在进入FFI前即被原静态门禁拒绝，不增加验证脚本或放宽预算。
+0.1.1 延续上述公开合同。原生 handle 字段和内部传输投影保留为明确的 Dynamic 边界；
+Rust 实现、Cargo crate 0.0.17、依赖/lock、opaque lease 生命周期和 C-safe ABI 沿用现有实现。
+模块仅支持 native；请为目标架构构建 dylib。本地验收不代表全平台运行保证。
 
-手写 native adapter 可正常使用。FFI Interface IR v3 对 Regex 的 Dynamic resource 字段
-仍明确拒绝生成；对已声明 Pattern union 的导出还会误报缺失声明，见
-[calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)。这不代表支持自动生成绑定，
-也不通过伪造资源类型隐藏该边界。本候选不发布 crates.io 或 npm，不部署应用。
+维护验收包括完整 strict、公开定义、原 native 入口与附加测试、Rust 测试、fmt、
+all-targets Clippy、locked release 构建和 ABI 导出检查。`Pattern` 附加测试覆盖
+字符串/编译值一致性及空匹配、缺失、`re-drop` 兼容行为。
 
-The 0.1.0 candidate requires official Calcit 0.34.1. Ten one-shot pattern inputs now accept
-only a source String or the public Regex wrapper, replacing unconstrained P/Dynamic inputs.
-re-pattern returns that wrapper; callers forwarding raw resource tokens must pass the whole
-Regex or use its typed methods. This is a non-patch API change, not an available release yet.
-Rust code, dependency locks, the C-safe ABI and lease ownership are unchanged. Native tests and
-strict checks pass; generated FFI bindings remain unsupported, with the named-union diagnostic
-tracked in #2536. There is no npm, JS/WASM or deployment claim.
+手写 native adapter 可正常使用。0.34.2 的 FFI Interface IR v3 对 Regex 的 Dynamic
+resource 字段拒绝生成；对已声明 Pattern union 的导出仍会误报缺失声明，见
+[calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)。不能把这次工具链升级
+当作自动生成绑定的支持声明，也不能通过伪造资源类型隐藏边界。
+
+Module 0.1.1 requires official Calcit 0.34.2. The published 0.1.0 release introduced
+`Pattern = String | Regex` for one-shot inputs and made `re-pattern` return the public
+Regex wrapper. Callers upgrading from older versions must pass the complete wrapper
+instead of raw native tokens, or use its typed methods. The native resource boundary,
+C-safe ABI and lease ownership remain as implemented. The module targets native only;
+FFI binding generation is still limited as described in #2536.
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
