@@ -60,10 +60,10 @@ Maintainers can inspect the deterministic contract without loading the dylib:
 calcit calcit.cirru ffi export --format json --ns regex.core
 ```
 
-Calcit 0.35.1 reports the `Regex` resource field as `E_FFI_IR_DYNAMIC_TYPE` and
+Calcit 0.37.0 reports the `Regex` resource field as `E_FFI_IR_DYNAMIC_TYPE` and
 recognizes the declared `Pattern` union as `E_FFI_IR_UNSUPPORTED_TYPE`. The
 handwritten adapter continues to manage the opaque resource. [Calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)
 
 `compile` 与 `re-source` 的 FFI 元数据记录 native backend、符号、调用方式和 `edn-buffer-v1`。
-手写适配器和运行时管理资源租约、generation 检查与最终释放。0.35.1 识别 `Pattern` 的声明，
+手写适配器和运行时管理资源租约、generation 检查与最终释放。0.37.0 识别 `Pattern` 的声明，
 IR v3 仍无法为该 union 或 `Regex` 的不透明资源字段生成绑定。
