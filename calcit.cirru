@@ -126,7 +126,7 @@
               (String source) source
               (Regex compiled) (:handle compiled)
           :examples $ []
-          :schema $ quote $ Fn regex.core/Pattern (-> Dynamic)
+          :schema $ quote $ Fn regex.core/Pattern (-> Dynamic) (:open :host)
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-drop (pattern)
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop $ pattern-handle pattern
