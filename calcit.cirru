@@ -27,9 +27,9 @@
               assert= (re-find-index |a4 |\d+) (re-find-index |a4 pattern)
               assert= (re-split |a1b2 |\d+) (re-split |a1b2 pattern)
               assert= (re-replace-all |a1b2 |\d+ |X) (re-replace-all |a1b2 pattern |X)
-              assert= (Option :none) (re-find-option |abc pattern)
-              assert= (Option :some |) (re-find-option |abc empty-pattern)
-              assert= (Option :none) (re-find-index-option |abc pattern)
+              assert= None $ re-find-option |abc pattern
+              assert= (Some |) (re-find-option |abc empty-pattern)
+              assert= None $ re-find-index-option |abc pattern
               re-drop pattern
               re-drop |\d+
               assert= |\d+ $ .source pattern
@@ -93,7 +93,7 @@
             assert |invalid-pattern-should-return-err $ .err? $ compile |[
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_compile_result) (:transport :edn-buffer-v1)
           :schema $ quote $ Fn String
-            -> $ Result regex.core/Regex String
+            -> $ Result Regex String
             :features :js-ffi
           :tests $ [] $ %{} 'TestEntry (:name |compiled-methods-preserve-option-semantics)
             :code $ quote $ do
@@ -117,8 +117,8 @@
           :examples $ [] $ quote
             let
                 pattern $ compile! |\d+
-              assert |compiled-pattern-finds-digit $ &= (Option :some |4) (.find pattern |a4)
-          :schema $ quote $ Fn String (-> regex.core/Regex)
+              assert |compiled-pattern-finds-digit $ &= (Some |4) (.find pattern |a4)
+          :schema $ quote $ Fn String (-> Regex)
         'pattern-handle $ %{} 'CodeEntry
           :doc "|Internal native-transport projection: source String or the existing opaque resource lease, validated by the Rust adapter. Do not expose or persist this Dynamic boundary."
           :code $ quote $ defn pattern-handle (pattern)
@@ -126,27 +126,27 @@
               (String source) source
               (Regex compiled) (:handle compiled)
           :examples $ []
-          :schema $ quote $ Fn regex.core/Pattern (-> Dynamic) (:open :host)
+          :schema $ quote $ Fn Pattern (-> Dynamic) (:open :host)
         're-drop $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-drop (pattern)
             &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_drop $ pattern-handle pattern
             , &unit
           :examples $ []
-          :schema $ quote $ Fn regex.core/Pattern (-> Unit)
+          :schema $ quote $ Fn Pattern (-> Unit)
         're-find $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find s $ pattern-handle pattern
               , 'String
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern (-> String)
+          :schema $ quote $ Fn String Pattern (-> String)
         're-find-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-all (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_all s $ pattern-handle pattern
               List String
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern
+          :schema $ quote $ Fn String Pattern
             -> $ List String
         're-find-index $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-find-index (s pattern)
@@ -154,17 +154,16 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index s $ pattern-handle pattern
               , 'Number
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern (-> Number)
+          :schema $ quote $ Fn String Pattern (-> Number)
         're-find-index-option $ %{} 'CodeEntry
           :doc "|Find the first match index as Option<Number> instead of using -1 as a sentinel."
           :code $ quote $ defn re-find-index-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text $ pattern-handle pattern
-              if (nil? found) (Option :none)
-                Option :some $ decode-map-as found 'Number
+              if (nil? found) None $ Some $ decode-map-as found 'Number
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
-          :schema $ quote $ Fn String regex.core/Pattern
+          :schema $ quote $ Fn String Pattern
             -> $ Option Number
             :features :js-ffi
         're-find-option $ %{} 'CodeEntry
@@ -172,11 +171,10 @@
           :code $ quote $ defn re-find-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text $ pattern-handle pattern
-              if (nil? found) (Option :none)
-                Option :some $ decode-map-as found 'String
+              if (nil? found) None $ Some $ decode-map-as found 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
-          :schema $ quote $ Fn String regex.core/Pattern
+          :schema $ quote $ Fn String Pattern
             -> $ Option String
             :features :js-ffi
         're-matches $ %{} 'CodeEntry (:doc |)
@@ -185,19 +183,19 @@
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_matches s $ pattern-handle pattern
               , 'Bool
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern (-> Bool)
+          :schema $ quote $ Fn String Pattern (-> Bool)
         're-pattern $ %{} 'CodeEntry
           :doc "|Compile a source string into the public Regex wrapper. Invalid syntax still raises; automatic lease ownership and re-drop compatibility behavior are preserved."
           :code $ quote $ defn re-pattern (pattern) (compile! pattern)
           :examples $ []
-          :schema $ quote $ Fn String (-> regex.core/Regex)
+          :schema $ quote $ Fn String (-> Regex)
         're-replace-all $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-replace-all (s pattern next)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_replace_all s (pattern-handle pattern) next
               , 'String
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern String (-> String)
+          :schema $ quote $ Fn String Pattern String (-> String)
         're-source $ %{} 'CodeEntry
           :doc "|Read the source string from a String or compiled Regex pattern."
           :code $ quote $ defn re-source (pattern)
@@ -206,14 +204,14 @@
               , 'String
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_source) (:transport :edn-buffer-v1)
-          :schema $ quote $ Fn regex.core/Pattern (-> String)
+          :schema $ quote $ Fn Pattern (-> String)
         're-split $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn re-split (s pattern)
             decode-map-as
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_split s $ pattern-handle pattern
               List String
           :examples $ []
-          :schema $ quote $ Fn String regex.core/Pattern
+          :schema $ quote $ Fn String Pattern
             -> $ List String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns regex.core
@@ -255,9 +253,9 @@
             let
                 compiled $ compile! |\d+
               check-equal true $ .matches? compiled |a4
-              check-equal (Option :some |4) (.find compiled |a4)
-              check-equal (Option :none) (.find compiled |abc)
-              check-equal (Option :some 1) (.find-index compiled |a4)
+              check-equal (Some |4) (.find compiled |a4)
+              check-equal None $ .find compiled |abc
+              check-equal (Some 1) (.find-index compiled |a4)
               check-equal ([] |1 |2) (.find-all compiled |a1b2)
               check-equal ([] |a |b |) (.split compiled |a1b2)
               check-equal |aXbX $ .replace-all compiled |a1b2 |X
