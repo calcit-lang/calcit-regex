@@ -46,25 +46,25 @@
         'RegexImpl $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defimpl RegexImpl RegexTrait
             .matches? $ fn (self text)
-              hint-fn $ Fn regex.core/Regex String $ -> Bool
+              hint-fn $ Fn Regex String $ -> Bool
               re-matches text self
             .find $ fn (self text)
-              hint-fn $ Fn regex.core/Regex String $ -> (Option String)
+              hint-fn $ Fn Regex String $ -> (Option String)
               re-find-option text self
             .find-index $ fn (self text)
-              hint-fn $ Fn regex.core/Regex String $ -> (Option Number)
+              hint-fn $ Fn Regex String $ -> (Option Number)
               re-find-index-option text self
             .find-all $ fn (self text)
-              hint-fn $ Fn regex.core/Regex String $ -> (List String)
+              hint-fn $ Fn Regex String $ -> (List String)
               re-find-all text self
             .split $ fn (self text)
-              hint-fn $ Fn regex.core/Regex String $ -> (List String)
+              hint-fn $ Fn Regex String $ -> (List String)
               re-split text self
             .replace-all $ fn (self text replacement)
-              hint-fn $ Fn regex.core/Regex String String $ -> String
+              hint-fn $ Fn Regex String String $ -> String
               re-replace-all text self replacement
             .source $ fn (self)
-              hint-fn $ Fn regex.core/Regex $ -> String
+              hint-fn $ Fn Regex $ -> String
               re-source self
           :examples $ []
           :schema $ quote Impl

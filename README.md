@@ -4,13 +4,13 @@
 
 ### 使用者影响
 
-候选模块 **0.1.5** 要求正式 Calcit **0.41.0**。请同步本地和 CI 的版本，并用锁定的 Cargo 依赖重建目标架构的动态库。
+候选模块 **0.1.5** 要求正式 Calcit **0.41.1**。请同步本地和 CI 的版本，并用锁定的 Cargo 依赖重建目标架构的动态库。
 
 `Pattern = String | Regex` 仍接受源码字符串和完整的编译对象。`re-pattern` 返回 `Regex`，原匹配结果、空匹配、缺失值和资源生命周期保持原有合同。原生 handle 在手写 FFI 适配边界保留为不透明资源。
 
 编译后的句柄由原生 FFI 管理。公开的 `String | Regex` 继续由具名 union 表达，句柄仍由原生资源协议校验。
 
-0.41.0 的 FFI 导出仍报告 IR 暂不支持命名 union 和 `Regex` 的不透明资源字段。本模块使用手写原生适配器。 [Calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)
+0.41.1 的 FFI 导出仍报告 IR 暂不支持命名 union 和 `Regex` 的不透明资源字段。本模块使用手写原生适配器。 [Calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
