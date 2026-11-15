@@ -35,16 +35,11 @@
               assert= |\d+ $ .source pattern
         'Regex $ %{} 'CodeEntry
           :doc "|Compiled regex constructor with RegexTrait methods attached."
-          :code $ quote $ def Regex (impl-traits Regex0 RegexImpl)
-          :examples $ []
-          :schema $ quote StructDef
-        'Regex0 $ %{} 'CodeEntry
-          :doc "|Base struct definition for the public Regex type; attach RegexImpl through the Regex constructor."
-          :code $ quote $ defstruct Regex (:handle Dynamic)
+          :code $ quote $ defstruct Regex (:handle Dynamic) (:impls RegexTrait)
           :examples $ []
           :schema $ quote StructDef
         'RegexImpl $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defimpl RegexImpl RegexTrait
+          :code $ quote $ defimpl Regex RegexTrait
             .matches? $ fn (self text)
               hint-fn $ Fn Regex String $ -> Bool
               re-matches text self
@@ -71,13 +66,13 @@
         'RegexTrait $ %{} 'CodeEntry
           :doc "|Typed methods for reusable compiled regex patterns."
           :code $ quote $ deftrait RegexTrait
-            .matches? $ Fn regex.core/Regex String $ -> Bool
-            .find $ Fn regex.core/Regex String $ -> (Option String)
-            .find-index $ Fn regex.core/Regex String $ -> (Option Number)
-            .find-all $ Fn regex.core/Regex String $ -> (List String)
-            .split $ Fn regex.core/Regex String $ -> (List String)
-            .replace-all $ Fn regex.core/Regex String String $ -> String
-            .source $ Fn regex.core/Regex $ -> String
+            .matches? $ Fn Self String $ -> Bool
+            .find $ Fn Self String $ -> (Option String)
+            .find-index $ Fn Self String $ -> (Option Number)
+            .find-all $ Fn Self String $ -> (List String)
+            .split $ Fn Self String $ -> (List String)
+            .replace-all $ Fn Self String String $ -> String
+            .source $ Fn Self $ -> String
           :examples $ []
           :schema $ quote Trait
         'compile $ %{} 'CodeEntry
