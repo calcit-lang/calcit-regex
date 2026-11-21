@@ -10,7 +10,7 @@
 
 编译后的句柄由原生 FFI 管理。公开的 `String | Regex` 继续由具名 union 表达，句柄仍由原生资源协议校验。
 
-0.44.0 的 FFI 导出仍报告 IR 暂不支持命名 union 和 `Regex` 的不透明资源字段。本模块使用手写原生适配器。 [Calcit #2536](https://github.com/calcit-lang/calcit/issues/2536)
+0.44.0 的 FFI 导出仍报告 IR 暂不支持命名 union 和 `Regex` 的不透明资源字段。本模块使用手写原生适配器；后续能力评估见 [Calcit #2895](https://github.com/calcit-lang/calcit/issues/2895)。此前 [#2536](https://github.com/calcit-lang/calcit/issues/2536) 已修复 union 被误报为声明缺失的诊断。
 
 API 设计: https://github.com/calcit-lang/calcit_runner.rs/discussions/116 .
 
