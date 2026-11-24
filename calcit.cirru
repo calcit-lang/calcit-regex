@@ -35,7 +35,7 @@
               assert= |\d+ $ .source pattern
         'Regex $ %{} 'CodeEntry
           :doc "|Compiled regex constructor with RegexTrait methods attached."
-          :code $ quote $ defstruct Regex (:handle Dynamic) (:impls RegexTrait)
+          :code $ quote $ defstruct Regex (:handle FfiResource) (:impls RegexTrait)
           :examples $ []
           :schema $ quote StructDef
         'RegexImpl $ %{} 'CodeEntry (:doc |)
@@ -81,7 +81,7 @@
             match
               &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_compile_result pattern
               (:ok handle)
-                Result :ok $ Regex :handle handle
+                Result :ok $ Regex :handle $ decode-map-as handle 'FfiResource
               (:err message)
                 Result :err $ decode-map-as message 'String
           :examples $ [] $ quote
