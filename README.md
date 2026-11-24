@@ -101,10 +101,10 @@ The typed native contract can be audited without loading the dylib:
 calcit calcit.cirru ffi export --format json --ns regex.core
 ```
 
-该命令只读导出 Interface IR v3 的稳定调用边界：backend、symbol、invoke 与
+该命令只读导出 Interface IR v4 的调用边界：backend、symbol、invoke 与
 transport。资源 registry、generation check 与最终引用自动 release 由模块和运行时
-adapter 内部管理，不要求 Calcit 调用方声明 ownership/borrow 元数据；`Regex` 的开放资源字段和
-`Pattern` 联合输入继续保留不可生成的显式 diagnostic。
+adapter 内部管理，不要求 Calcit 调用方声明 ownership/borrow 元数据。当前导出仍将
+`Regex` 的实现 trait 误当作字段并报告缺失声明，详见 [Calcit #2939](https://github.com/calcit-lang/calcit/issues/2939)；不要将当前输出视为可生成的完整接口。
 
 Install to `~/.config/calcit/modules/`, compile and provide `*.{dylib,so}` file with `./build.sh`.
 
