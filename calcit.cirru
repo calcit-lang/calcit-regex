@@ -155,7 +155,13 @@
           :code $ quote $ defn re-find-index-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_index_optional text $ pattern-handle pattern
-              if (nil? found) None $ Some $ decode-map-as found 'Number
+              match (edn:from-dynamic found)
+                (:ok edn)
+                  match edn
+                    (:nil) None
+                    (:number value) (Some value)
+                    _ $ raise "|regex native result has unexpected type"
+                _ $ raise "|regex native result has unexpected type"
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_index_optional) (:transport :edn-buffer-v1)
           :schema $ quote $ Fn String Pattern
@@ -166,7 +172,13 @@
           :code $ quote $ defn re-find-option (text pattern)
             let
                 found $ &call-dylib-edn (get-dylib-path |/dylibs/libcalcit_regex) |re_find_optional text $ pattern-handle pattern
-              if (nil? found) None $ Some $ decode-map-as found 'String
+              match (edn:from-dynamic found)
+                (:ok edn)
+                  match edn
+                    (:nil) None
+                    (:string value) (Some value)
+                    _ $ raise "|regex native result has unexpected type"
+                _ $ raise "|regex native result has unexpected type"
           :examples $ []
           :ffi $ {} (:backend :native) (:invoke :sync) (:symbol |re_find_optional) (:transport :edn-buffer-v1)
           :schema $ quote $ Fn String Pattern
