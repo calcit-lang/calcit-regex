@@ -4,11 +4,11 @@
 
 ### 使用者影响
 
-当前分支配对正式 Calcit **0.46.0**，尚未发布对应的模块 tag。已发布 **0.1.6** 配对 Calcit **0.45.1**，**0.1.5** 配对 **0.44.0**。请同步本地和 CI 的版本，并用锁定的 Cargo 依赖重建目标架构的动态库。
+候选模块 **0.1.7** 配对正式 Calcit **0.47.1**，尚未发布对应的模块 tag。已发布 **0.1.6** 配对 Calcit **0.45.1**，**0.1.5** 配对 **0.44.0**。请同步本地和 CI 的版本，并用锁定的 Cargo 依赖重建目标架构的动态库。
 
 `Pattern = String | Regex` 仍接受源码字符串和完整的编译对象。`re-pattern` 返回 `Regex`，原匹配结果、空匹配、缺失值和资源生命周期保持原有合同。`Regex.handle` 从 Dynamic 收窄为 `FfiResource`，编译结果在边界进行受检解码；直接构造 Regex 的调用方须提供有效资源句柄。
 
-编译后的句柄由原生 FFI 管理。公开的 `String | Regex` 继续由具名 union 表达，句柄仍由原生资源协议校验。
+编译后的句柄由原生 FFI 管理。公开的 `String | Regex` 继续由具名 union 表达，句柄仍由原生资源协议校验。内部传输返回 `String | FfiResource` 的尝试仍受 [Calcit #2938](https://github.com/calcit-lang/calcit/issues/2938) 阻塞，因此保留原受检宿主边界。
 
 0.46.0 的 FFI IR v4 已支持表达 union 和不透明资源，但本模块导出仍因 `RegexTrait` 实现字段报告缺失声明。本模块继续使用原有手写原生适配器；`FfiResource` 不能序列化，也不支持 JS/WASM 目标。
 
